@@ -19,10 +19,11 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import Link from 'next/link'
+import { useCallback } from 'react'
 
 const SignInFormSchema = z.object({
-  name: z.string().min(4, 'Name must be at least 2 characters long'),
-  password: z.string().min(8, 'Password must be at least 6 characters long'),
+  name: z.string().min(4, 'Name must be at least 4 characters long'),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
 })
 
 type SignInFormData = z.infer<typeof SignInFormSchema>
@@ -38,10 +39,15 @@ export function LoginForm({
       password: '',
     },
   })
+
+  const onSubmit = useCallback((data: SignInFormData) => {
+    console.log(data)
+  }, [])
+
   return (
     <Form {...methods}>
       <div className={cn('flex flex-col gap-6', className)} {...props}>
-        <form>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
           <FieldGroup>
             <div className="flex flex-col items-center gap-2 text-center">
               <Link
