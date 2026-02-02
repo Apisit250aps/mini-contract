@@ -16,18 +16,12 @@ async function createUser(data: User): Promise<User | null> {
   const users = await usersCollection()
   const parse = await safeValidate(BaseUser.extend({ password: zodPassword }), {
     ...data,
-    isActive: true,
-    lastLogin: null,
     createdAt: new Date(),
     updatedAt: new Date(),
   })
 
   if (parse.error) throw new Error(parse.error)
 
-  const isUnique = await users.findOne({ name: parse.data!.name })
-  if (isUnique) {
-    throw new Error('Username already exists')
-  }
   const password = await hash(parse.data!.password)
   const result = await users.insertOne({
     ...parse.data!,
@@ -75,4 +69,28 @@ async function updateUser(
   return result
 }
 
-export { createUser, updateUser }
+async function deleteUser(id: string): Promise<boolean> {
+  const users = await usersCollection()
+  const result = await users.deleteOne({ id })
+  return result.deletedCount === 1
+}
+
+async function getUserById(id: string): Promise<User | null> {
+  const users = await usersCollection()
+  const user = await users.findOne(
+    { id },
+    { projection: { password: 0, _id: 0 } },
+  )
+  return user
+}
+
+async function getUserByName(name: string): Promise<User | null> {
+  const users = await usersCollection()
+  const user = await users.findOne(
+    { name },
+    { projection: { password: 0, _id: 0 } },
+  )
+  return user
+}
+
+export { createUser, updateUser, deleteUser, getUserById, getUserByName }

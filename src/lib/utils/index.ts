@@ -9,7 +9,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function zodError<T>(error: z.ZodError<T>): string {
-  return error.issues[0].message
+  console.log('Zod validation error:', error.issues)
+  return `Field ${error.issues[0].path.join('.')}! ${error.issues[0].message}`
 }
 
 export async function safeValidate<T>(
@@ -17,6 +18,5 @@ export async function safeValidate<T>(
   payload: unknown,
 ): Promise<{ data: T | null; error: string | null }> {
   const { data, error } = await schema.safeParseAsync(payload)
-
   return { data: data ?? null, error: error ? zodError(error) : null }
 }
