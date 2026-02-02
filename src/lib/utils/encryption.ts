@@ -8,5 +8,6 @@ export async function verify(
   hashed: string,
   password: string,
 ): Promise<boolean> {
-  return await argon2.verify(hashed, password)
+  const v = await argon2.verify(hashed, password)
+  return v
 }

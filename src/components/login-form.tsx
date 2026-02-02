@@ -20,6 +20,9 @@ import {
 } from '@/components/ui/form'
 import Link from 'next/link'
 import { useCallback } from 'react'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 const SignInFormSchema = z.object({
   name: z.string().min(4, 'Name must be at least 4 characters long'),
@@ -32,6 +35,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
+  const router = useRouter()
   const methods = useForm<SignInFormData>({
     resolver: zodResolver(SignInFormSchema),
     defaultValues: {
@@ -40,9 +44,22 @@ export function LoginForm({
     },
   })
 
-  const onSubmit = useCallback((data: SignInFormData) => {
-    console.log(data)
-  }, [])
+  const onSubmit = useCallback(
+    async (data: SignInFormData) => {
+      const result = await signIn('credentials', {
+        redirect: false,
+        name: data.name,
+        password: data.password,
+      })
+      if (!result?.error) {
+        toast.success('Logged in successfully!')
+        router.refresh()
+        return
+      }
+      toast.error('Invalid username or password')
+    },
+    [router],
+  )
 
   return (
     <Form {...methods}>

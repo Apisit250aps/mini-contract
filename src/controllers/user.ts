@@ -1,15 +1,21 @@
 import { safeValidate } from '@/lib/utils'
 import { BaseUser, User } from '@/models/entities/user'
 import { createUser, getUserByName } from '@/models/repositories/user'
-import { ApiResponse } from '@/types'
 import { NextRequest, NextResponse } from 'next/server'
 
 async function CreateUser(
   req: NextRequest,
-): Promise<NextResponse<ApiResponse<User | null>>> {
+): Promise<NextResponse<ApiResponse<User>>> {
   try {
     const data = await req.json()
-    const validation = await safeValidate(BaseUser, data)
+    const validation = await safeValidate(
+      BaseUser.pick({
+        name: true,
+        password: true,
+        isActive: true,
+      }),
+      data,
+    )
     if (validation.error || !validation.data) {
       return NextResponse.json(
         {
@@ -20,7 +26,6 @@ async function CreateUser(
         { status: 400 },
       )
     }
-
     const exists = await getUserByName(validation.data.name)
     if (exists) {
       return NextResponse.json(

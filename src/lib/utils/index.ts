@@ -9,7 +9,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function zodError<T>(error: z.ZodError<T>): string {
-  console.log('Zod validation error:', error.issues)
   return `Field ${error.issues[0].path.join('.')}! ${error.issues[0].message}`
 }
 

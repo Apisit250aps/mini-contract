@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server'
+
 import { NextAuthRequest } from 'next-auth'
+import { NextResponse } from 'next/server';
 
 export type MiddlewareGroup = {
   prefix?: string

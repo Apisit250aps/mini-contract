@@ -1,9 +1,9 @@
 import z from 'zod'
-import { isNil, omitBy } from 'lodash'
+import { isNil, omit, omitBy } from 'lodash'
 
 import { usersCollection } from '@/lib/mongo'
 import { safeValidate } from '@/lib/utils'
-import { hash } from '@/lib/utils/encryption'
+import { hash, verify } from '@/lib/utils/encryption'
 import { BaseUser, User } from '@/models/entities/user'
 
 const zodUpdatePassword = z.string().transform(async (val) => {
@@ -12,7 +12,9 @@ const zodUpdatePassword = z.string().transform(async (val) => {
 })
 const zodPassword = z.string().transform(async (val) => await hash(val))
 
-async function createUser(data: User): Promise<User | null> {
+async function createUser(
+  data: Pick<User, 'name' | 'password' | 'isActive'>,
+): Promise<User | null> {
   const users = await usersCollection()
   const parse = await safeValidate(BaseUser.extend({ password: zodPassword }), {
     ...data,
@@ -22,10 +24,8 @@ async function createUser(data: User): Promise<User | null> {
 
   if (parse.error) throw new Error(parse.error)
 
-  const password = await hash(parse.data!.password)
   const result = await users.insertOne({
     ...parse.data!,
-    password,
   })
   if (!result.acknowledged) {
     throw new Error('Failed to create user')
@@ -93,4 +93,30 @@ async function getUserByName(name: string): Promise<User | null> {
   return user
 }
 
-export { createUser, updateUser, deleteUser, getUserById, getUserByName }
+async function userLogin({
+  name,
+  password,
+}: {
+  name: string
+  password: string
+}): Promise<Omit<User, 'password'> | null> {
+  const users = await usersCollection()
+  const user = await users.findOne({ name })
+  if (!user) return null
+
+  const isValid = await verify(user.password, password)
+  
+  if (!isValid) return null
+  await updateUser(user.id, { lastLogin: new Date() })
+  const auth = omit(user, ['password', '_id'])
+  return auth
+}
+
+export {
+  createUser,
+  updateUser,
+  deleteUser,
+  getUserById,
+  getUserByName,
+  userLogin,
+}
