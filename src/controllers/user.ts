@@ -156,4 +156,38 @@ async function DeleteUser(
   }
 }
 
-export { CreateUser, UpdateUser, DeleteUser }
+async function GetUser(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+): Promise<NextResponse<ApiResponse<User>>> {
+  try {
+    const { id } = await params
+    const user = await getUserById(id)
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'User not found',
+          error: 'Not Found',
+        },
+        { status: 404 },
+      )
+    }
+    return NextResponse.json({
+      success: true,
+      message: 'User fetched successfully',
+      data: user,
+    })
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Internal Server Error',
+        error: (error as Error).message,
+      },
+      { status: 500 },
+    )
+  }
+}
+
+export { CreateUser, UpdateUser, DeleteUser, GetUser }
