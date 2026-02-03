@@ -191,9 +191,8 @@ async function GetUser(
   }
 }
 
-async function ListUsers(
-  _req: NextRequest,
-): Promise<NextResponse<ApiResponse<User[]>>> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function ListUsers(_: NextRequest): Promise<NextResponse<ApiResponse<User[]>>> {
   try {
     const users = await getAllUser()
     return NextResponse.json({
