@@ -2,6 +2,7 @@ import { safeValidate } from '@/lib/utils'
 import { BaseUser, User } from '@/models/entities/user'
 import {
   createUser,
+  deleteUser,
   getUserById,
   getUserByName,
   updateUser,
@@ -118,4 +119,41 @@ async function UpdateUser(
   }
 }
 
-export { CreateUser, UpdateUser }
+async function DeleteUser(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+): Promise<NextResponse<ApiResponse<null>>> {
+  try {
+    const { id } = await params
+    const user = await getUserById(id)
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'User not found',
+          error: 'Not Found',
+        },
+        { status: 404 },
+      )
+    }
+
+    await deleteUser(id)
+
+    return NextResponse.json({
+      success: true,
+      message: 'User deleted successfully',
+      data: null,
+    })
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Internal Server Error',
+        error: (error as Error).message,
+      },
+      { status: 500 },
+    )
+  }
+}
+
+export { CreateUser, UpdateUser, DeleteUser }
