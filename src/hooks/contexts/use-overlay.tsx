@@ -15,10 +15,7 @@ const OverlayContext = createContext<OverlayContextValue | null>(null)
 export const DIALOG_KEY = {
   ACTION_DROPDOWN: 'ACTION_DROPDOWN',
   MODAL_DIALOG: 'MODAL_DIALOG',
-  ALERT_DIALOG: 'ALERT_DIALOG',
   CONFIRM_DIALOG: 'CONFIRM_DIALOG',
-  FORM_DIALOG: 'FORM_DIALOG',
-  CUSTOM_DIALOG: 'CUSTOM_DIALOG',
 } as const
 
 export function OverlayProvider({ children }: { children: React.ReactNode }) {
