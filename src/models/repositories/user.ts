@@ -93,6 +93,14 @@ async function getUserByName(name: string): Promise<User | null> {
   return user
 }
 
+async function getAllUser() {
+  const users = await usersCollection()
+  const list = await users
+    .find({}, { projection: { password: 0, _id: 0 } })
+    .toArray()
+  return list
+}
+
 async function userLogin({
   name,
   password,
@@ -105,7 +113,7 @@ async function userLogin({
   if (!user) return null
 
   const isValid = await verify(user.password, password)
-  
+
   if (!isValid) return null
   await updateUser(user.id, { lastLogin: new Date() })
   const auth = omit(user, ['password', '_id'])
@@ -118,5 +126,6 @@ export {
   deleteUser,
   getUserById,
   getUserByName,
+  getAllUser,
   userLogin,
 }

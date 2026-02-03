@@ -3,6 +3,7 @@ import { BaseUser, User } from '@/models/entities/user'
 import {
   createUser,
   deleteUser,
+  getAllUser,
   getUserById,
   getUserByName,
   updateUser,
@@ -120,7 +121,7 @@ async function UpdateUser(
 }
 
 async function DeleteUser(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ): Promise<NextResponse<ApiResponse<null>>> {
   try {
@@ -157,7 +158,7 @@ async function DeleteUser(
 }
 
 async function GetUser(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ): Promise<NextResponse<ApiResponse<User>>> {
   try {
@@ -190,4 +191,26 @@ async function GetUser(
   }
 }
 
-export { CreateUser, UpdateUser, DeleteUser, GetUser }
+async function ListUsers(
+  _req: NextRequest,
+): Promise<NextResponse<ApiResponse<User[]>>> {
+  try {
+    const users = await getAllUser()
+    return NextResponse.json({
+      success: true,
+      message: 'Users fetched successfully',
+      data: users,
+    })
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Internal Server Error',
+        error: (error as Error).message,
+      },
+      { status: 500 },
+    )
+  }
+}
+
+export { CreateUser, UpdateUser, DeleteUser, GetUser, ListUsers }
