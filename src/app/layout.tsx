@@ -5,6 +5,7 @@ import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
+import { OverlayProvider } from '@/hooks/contexts/use-overlay'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,7 +33,9 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SessionProvider session={session}>{children}</SessionProvider>
+        <SessionProvider session={session}>
+          <OverlayProvider>{children}</OverlayProvider>
+        </SessionProvider>
         <Toaster position="top-right" />
       </body>
     </html>
