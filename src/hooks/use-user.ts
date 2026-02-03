@@ -1,4 +1,5 @@
 import {
+  createUserService,
   deleteUserService,
   getAllUserService,
   getUserService,
@@ -18,6 +19,11 @@ export const useUserQuery = () => {
     mutationFn: getUserService,
   })
 
+  const created = useMutation({
+    mutationKey: ['USER', 'CREATE_USER'],
+    mutationFn: createUserService,
+  })
+
   const updated = useMutation({
     mutationKey: ['USER', 'UPDATE_USER'],
     mutationFn: updateUserService,
@@ -31,6 +37,7 @@ export const useUserQuery = () => {
   return {
     list,
     get,
+    created,
     updated,
     deleted,
   }
