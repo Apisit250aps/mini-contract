@@ -10,24 +10,27 @@ import { IconDotsVertical } from '@tabler/icons-react'
 
 export const ActionDropdown = ({
   children,
+  key,
 }: {
   children?: React.ReactNode
+  key?: string
 }) => {
   const { open, openOverlay, closeOverlay } = useOverlay()
+  const KEY = `${DIALOG_KEY.ACTION_DROPDOWN}_${key}`
   return (
     <DropdownMenu
-      open={open[DIALOG_KEY.ACTION_DROPDOWN] || false}
+      open={open[KEY] || false}
       onOpenChange={(v) =>
         v
-          ? openOverlay(DIALOG_KEY.ACTION_DROPDOWN)
-          : closeOverlay(DIALOG_KEY.ACTION_DROPDOWN)
+          ? openOverlay(KEY)
+          : closeOverlay(KEY)
       }
     >
       <DropdownMenuTrigger
         asChild
         onClick={(e) => {
           e.preventDefault()
-          openOverlay(DIALOG_KEY.ACTION_DROPDOWN)
+          openOverlay(KEY)
         }}
       >
         <Button

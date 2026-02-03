@@ -10,7 +10,7 @@ export const isNoAuth = async (req: NextAuthRequest) => {
 
 export const isAuthenticated = async (req: NextAuthRequest) => {
   const session = req.auth
-  console.log('Session in isAuthenticated middleware:', session)
+  
   if (!session) {
     return NextResponse.redirect(new URL('/login', req.nextUrl))
   }
