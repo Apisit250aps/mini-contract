@@ -7,7 +7,7 @@ export const BaseUser = z.object({
   password: z.string().min(8),
   isActive: z.boolean().default(true),
   lastLogin: z.date().nullable().default(null),
-  createdAt: z.date().default(() => new Date()),
+  createdAt: z.date(),
   updatedAt: z.date().default(() => new Date()),
 })
 
