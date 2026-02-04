@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/card'
 import { useOverlay } from '@/hooks/contexts/use-overlay'
 import { useUserQuery } from '@/hooks/use-user'
-import { onErrorMessage } from '@/lib/utils'
 import { Plus } from 'lucide-react'
 import { useCallback } from 'react'
 import { toast } from 'sonner'

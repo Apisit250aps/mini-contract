@@ -33,7 +33,7 @@ const ColumnActions = ({ cell }: { cell: Cell<User, unknown> }) => {
           },
         },
         {
-          onSettled(error) {
+          onSettled(_data, error) {
             if (error) {
               toast.error(onErrorMessage(error))
             } else {

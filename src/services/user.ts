@@ -1,27 +1,24 @@
 import client from '@/lib/client'
 import { onErrorMessage } from '@/lib/utils'
 import { User } from '@/models/entities/user'
-import axios from 'axios'
-import { on } from 'events'
 
 async function createUserService({
   data,
 }: {
   data: Partial<User>
 }): Promise<User> {
-  const result = await client.post('/api/user', data)
-  console.log('result', result)
-  if (result.data) {
+  const result = await client.post<ApiResponse<User>>('/api/user', data)
+  if (result.data.error) {
     throw new Error(result.data.message)
   }
-  return result.data.data
+  return result.data.data!
 }
 
 async function getUserService({ id }: { id: string }): Promise<User> {
   try {
-    const result = await axios.get<ApiResponse<User>>(`/api/user/${id}`)
+    const result = await client.get<ApiResponse<User>>(`/api/user/${id}`)
     if (result.data.error) {
-      throw new Error(result.data.error)
+      throw new Error(result.data.message)
     }
     return result.data.data!
   } catch (error) {
@@ -31,9 +28,9 @@ async function getUserService({ id }: { id: string }): Promise<User> {
 
 async function getAllUserService(): Promise<User[]> {
   try {
-    const result = await axios.get<ApiResponse<User[]>>('/api/user')
+    const result = await client.get<ApiResponse<User[]>>('/api/user')
     if (result.data.error) {
-      throw new Error(result.data.error)
+      throw new Error(result.data.message)
     }
     return result.data.data!
   } catch (error) {
@@ -49,9 +46,9 @@ async function updateUserService({
   data: Partial<User>
 }): Promise<User> {
   try {
-    const result = await axios.put<ApiResponse<User>>(`/api/user/${id}`, data)
+    const result = await client.put<ApiResponse<User>>(`/api/user/${id}`, data)
     if (result.data.error) {
-      throw new Error(result.data.error)
+      throw new Error(result.data.message)
     }
     return result.data.data!
   } catch (error) {
@@ -60,9 +57,9 @@ async function updateUserService({
 }
 async function deleteUserService({ id }: { id: string }): Promise<void> {
   try {
-    const result = await axios.delete<ApiResponse<null>>(`/api/user/${id}`)
+    const result = await client.delete<ApiResponse<null>>(`/api/user/${id}`)
     if (result.data.error) {
-      throw new Error(result.data.error)
+      throw new Error(result.data.message)
     }
     return
   } catch (error) {
