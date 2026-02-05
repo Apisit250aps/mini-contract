@@ -11,9 +11,63 @@ import { IconDotsVertical } from '@tabler/icons-react'
 import { Pen, Trash } from 'lucide-react'
 import { ConfirmDialog } from '@/components/share/overlay/confirm-dialog'
 import { Worker } from '@/models/entities/worker'
+import { useOverlay } from '@/hooks/contexts/use-overlay'
+import { useWorkerQuery } from '@/hooks/use-worker'
+import { useCallback } from 'react'
+import WorkerForm, { WorkerFormDataValues } from './worker-form'
+import { toast } from 'sonner'
 
 const WorkerActions = ({ cell }: { cell: Cell<Worker, unknown> }) => {
-  // Similar implementation as ColumnActions for User but adapted for Worker
+  const { closeAll } = useOverlay()
+  const { updated, list, deleted } = useWorkerQuery()
+
+  const onEdit = useCallback(
+    async (data: WorkerFormDataValues) => {
+      await updated.mutateAsync(
+        {
+          id: cell.row.original.id,
+          data: {
+            name: data.name!,
+            isActive: data.isActive!,
+            position: data.position!,
+            hiredAt: data.hiredAt ? new Date(data.hiredAt) : null,
+          },
+        },
+        {
+          onSettled(_data, error) {
+            if (error) {
+              toast.error(error.message)
+            } else {
+              toast.success('Worker updated successfully.')
+              list.refetch()
+              closeAll()
+            }
+          },
+        },
+      )
+    },
+    [cell.row.original.id, closeAll, list, updated],
+  )
+
+  const onDelete = useCallback(async () => {
+    await deleted.mutateAsync(
+      {
+        id: cell.row.original.id,
+      },
+      {
+        onSettled(error) {
+          if (error) {
+            toast.error(error)
+          } else {
+            toast.success('Worker deleted successfully.')
+            list.refetch()
+            closeAll()
+          }
+        },
+      },
+    )
+  }, [cell.row.original.id, closeAll, deleted, list])
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,7 +91,7 @@ const WorkerActions = ({ cell }: { cell: Cell<Worker, unknown> }) => {
             </DropdownMenuItem>
           }
         >
-          {/* <UserForm values={cell.row.original} onSubmit={onEdit} /> */}
+          <WorkerForm values={cell.row.original} onSubmit={onEdit} />
         </ModalDialog>
         <ConfirmDialog
           title={'Delete Worker!'}
@@ -47,7 +101,7 @@ const WorkerActions = ({ cell }: { cell: Cell<Worker, unknown> }) => {
               <Trash /> Delete
             </DropdownMenuItem>
           }
-          onConfirm={() => {}}
+          onConfirm={onDelete}
         />
       </DropdownMenuContent>
     </DropdownMenu>

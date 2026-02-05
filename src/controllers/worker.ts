@@ -16,8 +16,10 @@ async function CreateWorker(
   try {
     const data = await req.json()
     const parsed = await safeValidate(
-      BaseWorker.omit({ id: true, createdAt: true, updatedAt: true }),
-      data,
+      BaseWorker.omit({ id: true, createdAt: true, updatedAt: true }).extend({
+        position: BaseWorker.shape.position.optional(),
+      }),
+      { ...data, hiredAt: data.hiredAt ? new Date(data.hiredAt) : null },
     )
     if (parsed.error || !parsed.data) {
       return NextResponse.json(
@@ -73,7 +75,7 @@ async function UpdateWorker(
         createdAt: true,
         updatedAt: true,
       }).partial(),
-      data,
+      { ...data, hiredAt: data.hiredAt ? new Date(data.hiredAt) : null },
     )
     if (validation.error || !validation.data) {
       return NextResponse.json(
@@ -171,6 +173,7 @@ async function GetWorker(
 }
 
 async function GetAllWorkers(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _req: NextRequest,
 ): Promise<NextResponse<ApiResponse<Worker[]>>> {
   try {

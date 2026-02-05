@@ -23,34 +23,28 @@ const ColumnActions = ({ cell }: { cell: Cell<User, unknown> }) => {
   const { updated, list, deleted } = useUserQuery()
   const onEdit = useCallback(
     async (data: UserFormDataValues) => {
-      await updated
-        .mutateAsync(
-          {
-            id: cell.row.original.id,
-            data: {
-              name: data.name!,
-              isActive: data.isActive!,
-              ...(data.password ? { password: data.password } : {}),
-            },
+      await updated.mutateAsync(
+        {
+          id: cell.row.original.id,
+          data: {
+            name: data.name!,
+            isActive: data.isActive!,
+            ...(data.password ? { password: data.password } : {}),
           },
-          {
-            onSettled(_data, error) {
-              if (error) {
-                toast.error(onErrorMessage(error))
-              } else {
-                toast.success('User updated successfully.')
-                list.refetch()
-                closeAll()
-              }
-            },
+        },
+        {
+          onSettled(_data, error) {
+            if (error) {
+              toast.error(onErrorMessage(error))
+            } else {
+              toast.success('User updated successfully.')
+              list.refetch()
+              closeAll()
+            }
           },
-        )
-        .then((success) => {
-          console.log('success', success)
-        })
-        .catch((error) => {
-          console.log('error', error)
-        })
+        },
+      )
+
       await list.refetch()
       closeAll()
     },
