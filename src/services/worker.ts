@@ -1,6 +1,6 @@
 import client from '@/lib/client'
 import { onErrorMessage } from '@/lib/utils'
-
+import { Worker } from '@/models/entities/worker'
 export async function createWorkerService(
   data: Partial<Worker>,
 ): Promise<Worker> {
