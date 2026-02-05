@@ -2,7 +2,9 @@ import { workersCollection } from '@/lib/mongo'
 import { safeValidate, uuidv7 } from '@/lib/utils'
 import { BaseWorker, Worker } from '@/models/entities/worker'
 
-async function createWorker(worker: Worker): Promise<Worker> {
+async function createWorker(
+  worker: Omit<Worker, 'id' | 'createdAt' | 'updatedAt'>,
+): Promise<Worker> {
   const workers = await workersCollection()
   const parsed = await safeValidate(BaseWorker, {
     ...worker,
