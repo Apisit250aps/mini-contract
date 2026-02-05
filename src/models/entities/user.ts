@@ -1,7 +1,7 @@
 import z from 'zod'
 
 export const BaseUser = z.object({
-  id: z.uuid(),
+  id: z.uuid().def,
   name: z.string().min(4).max(100),
   password: z.string().min(8),
   isActive: z.boolean().default(true),
