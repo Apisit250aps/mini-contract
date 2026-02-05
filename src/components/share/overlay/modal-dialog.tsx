@@ -15,6 +15,7 @@ type ModalDialogProps = {
   trigger?: React.ReactNode
   children?: React.ReactNode
   closeOutside?: boolean
+  dialogKey?: string
 }
 
 export default function ModalDialog({
@@ -23,15 +24,16 @@ export default function ModalDialog({
   trigger,
   children,
   closeOutside = true,
+  dialogKey = DIALOG_KEY.MODAL_DIALOG,
 }: ModalDialogProps) {
   const { open, closeOverlay, openOverlay } = useOverlay()
   return (
     <Dialog
-      open={open[DIALOG_KEY.MODAL_DIALOG] || false}
+      open={open[dialogKey] || false}
       onOpenChange={(v) =>
         v
-          ? openOverlay(DIALOG_KEY.MODAL_DIALOG)
-          : closeOverlay(DIALOG_KEY.MODAL_DIALOG)
+          ? openOverlay(dialogKey)
+          : closeOverlay(dialogKey)
       }
     >
       {trigger && (
@@ -39,7 +41,7 @@ export default function ModalDialog({
           asChild
           onClick={(e) => {
             e.preventDefault()
-            openOverlay(DIALOG_KEY.MODAL_DIALOG)
+            openOverlay(dialogKey)
           }}
         >
           {trigger}

@@ -9,9 +9,10 @@ import { Cell, ColumnDef } from '@tanstack/react-table'
 import { Pen, Trash } from 'lucide-react'
 import { useCallback } from 'react'
 import { toast } from 'sonner'
+import ContractForm, { ContractFormDataValues } from './contract-form'
 
 const ContractAction = ({ cell }: { cell: Cell<Contract, unknown> }) => {
-  const { deleted, list } = useContractQuery()
+  const { deleted, list, updated } = useContractQuery()
   const { closeAll } = useOverlay()
   //
   const onDelete = useCallback(async () => {
@@ -33,23 +34,60 @@ const ContractAction = ({ cell }: { cell: Cell<Contract, unknown> }) => {
     )
   }, [cell.row.original.id, closeAll, deleted, list])
   //
+  const onEdit = useCallback(
+    async (data: ContractFormDataValues) => {
+      await updated.mutateAsync(
+        {
+          id: cell.row.original.id,
+          data: {
+            title: data.title!,
+            description: data.description!,
+            employer: data.employer!,
+            startDate: data.startDate
+              ? new Date(data.startDate)
+              : data.startDate,
+            endDate: data.endDate ? new Date(data.endDate) : data.endDate,
+            isActive: data.isActive!,
+            workers: data.workers!,
+            size: data.size!,
+          },
+        },
+        {
+          onSettled(_data, error) {
+            if (error) {
+              toast.error(error.message)
+            } else {
+              toast.success('Contract updated successfully.')
+              list.refetch()
+              closeAll()
+            }
+          },
+        },
+      )
+    },
+    [cell.row.original.id, closeAll, list, updated],
+  )
   return (
     <ActionDropdown id={cell.row.original.id}>
       <ModalDialog
-        title={'Edit Worker'}
-        description="Modify the worker information as needed."
+        title={'Edit Contract'}
+        description="Modify the contract information as needed."
         closeOutside={false}
+        dialogKey="EDIT_CONTRACT_MODAL"
         trigger={
           <DropdownMenuItem>
             <Pen /> Edit
           </DropdownMenuItem>
         }
       >
-        {/* <WorkerForm values={cell.row.original} onSubmit={onEdit} /> */}
+        <ContractForm
+          values={cell.row.original}
+          onSubmit={onEdit}
+        />
       </ModalDialog>
       <ConfirmDialog
-        title={'Delete Worker!'}
-        description="Are you sure you want to delete this worker? This action cannot be undone."
+        title={'Delete Contract!'}
+        description="Are you sure you want to delete this contract? This action cannot be undone."
         trigger={
           <DropdownMenuItem variant={'destructive'}>
             <Trash /> Delete

@@ -32,26 +32,49 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useMemo } from 'react'
 import { Label } from '@/components/ui/label'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  value?: string[]
+  onChange?: (value: string[]) => void
 }
 
 export default function DataTable<TData, TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
-  const memoData = useMemo(() => data, [data])
+  value,
+  onChange,
+}: DataTableProps<TData & { id: string }, TValue>) {
+  const memoData = useMemo(() => data || [], [data])
   const memoColumns = useMemo(() => columns, [columns])
-  const [rowSelection, setRowSelection] = React.useState({})
+
+  // Initialize rowSelection based on the initial value prop
+  const initialRowSelection = useMemo(() => {
+    if (value) {
+      return value.reduce(
+        (acc, id) => {
+          acc[id] = true
+          return acc
+        },
+        {} as Record<string, boolean>,
+      )
+    }
+    return {}
+  }, [value]) // Empty deps array ensures this only runs once on mount
+
+  const [rowSelection, setRowSelection] = React.useState(initialRowSelection)
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
   })
+
+  // Use refs to track previous values and prevent infinite loops
+  const prevValueRef = useRef<string[] | undefined>(undefined)
+  const isInternalUpdateRef = useRef(false)
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: memoData,
@@ -61,6 +84,7 @@ export default function DataTable<TData, TValue>({
       pagination,
     },
     enableRowSelection: true,
+    getRowId: (row) => row.id,
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
@@ -69,6 +93,36 @@ export default function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   })
+
+  // Handle row selection changes and notify parent component
+  useEffect(() => {
+    if (!isInternalUpdateRef.current) {
+      const selectedIds = Object.keys(rowSelection)
+      onChange?.(selectedIds)
+    }
+    isInternalUpdateRef.current = false
+  }, [onChange, rowSelection])
+
+  // Handle external value changes (from parent component)
+  useEffect(() => {
+    if (
+      value &&
+      JSON.stringify(value) !== JSON.stringify(prevValueRef.current)
+    ) {
+      prevValueRef.current = value
+      isInternalUpdateRef.current = true
+
+      const newSelection = value.reduce(
+        (acc, id) => {
+          acc[id] = true
+          return acc
+        },
+        {} as Record<string, boolean>,
+      )
+
+      setRowSelection(newSelection)
+    }
+  }, [value])
 
   return (
     <div className="overflow-hidden rounded-md border p-4">

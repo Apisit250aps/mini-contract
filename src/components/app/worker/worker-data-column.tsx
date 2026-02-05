@@ -10,6 +10,7 @@ import { useCallback } from 'react'
 import WorkerForm, { WorkerFormDataValues } from './worker-form'
 import { toast } from 'sonner'
 import { ActionDropdown } from '@/components/share/overlay/action-dropdown'
+import { Checkbox } from '@/components/ui/checkbox'
 
 const WorkerActions = ({ cell }: { cell: Cell<Worker, unknown> }) => {
   const { closeAll } = useOverlay()
@@ -89,6 +90,43 @@ const WorkerActions = ({ cell }: { cell: Cell<Worker, unknown> }) => {
     </ActionDropdown>
   )
 }
+
+export const selectWorkerColumn: ColumnDef<Worker>[] = [
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <div className="flex items-center justify-center">
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && 'indeterminate')
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      </div>
+    ),
+    cell: ({ row }) => (
+      <div className="flex items-center justify-center">
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      </div>
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'name',
+    header: 'Name',
+  },
+  {
+    accessorKey: 'position',
+    header: 'Position',
+  },
+]
 
 export const workerColumns: ColumnDef<Worker>[] = [
   {
