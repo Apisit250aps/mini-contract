@@ -2,7 +2,7 @@ import z from 'zod'
 import { isNil, omit, omitBy } from 'lodash'
 
 import { usersCollection } from '@/lib/mongo'
-import { safeValidate, uuidv7 } from '@/lib/utils'
+import { safeValidate } from '@/lib/utils'
 import { hash, verify } from '@/lib/utils/encryption'
 import { BaseUser, User } from '@/models/entities/user'
 
@@ -18,13 +18,12 @@ async function createUser(
   const users = await usersCollection()
   const parse = await safeValidate(BaseUser.extend({ password: zodPassword }), {
     ...data,
-    id: uuidv7(),
     createdAt: new Date(),
     updatedAt: new Date(),
   })
 
   if (parse.error) throw new Error(parse.error)
-  
+
   const result = await users.insertOne({
     ...parse.data!,
   })
@@ -116,7 +115,8 @@ async function userLogin({
   const isValid = await verify(user.password, password)
 
   if (!isValid) return null
-  await updateUser(user.id, { lastLogin: new Date() })
+
+  await updateUser(user.id as string, { lastLogin: new Date() })
   const auth = omit(user, ['password', '_id'])
   return auth
 }

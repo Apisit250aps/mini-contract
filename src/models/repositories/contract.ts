@@ -1,5 +1,5 @@
 import { contractsCollection } from '@/lib/mongo'
-import { safeValidate } from '@/lib/utils'
+import { safeValidate, uuidv7 } from '@/lib/utils'
 import { BaseContract, Contract } from '@/models/entities/contract'
 
 export async function getContracts(): Promise<Contract[]> {
@@ -16,19 +16,20 @@ export async function createContract(
   contract: Omit<Contract, 'id' | 'createdAt' | 'updatedAt'>,
 ): Promise<Contract> {
   const collection = await contractsCollection()
-  const parsed = await safeValidate(
-    BaseContract.omit({ id: true, createdAt: true, updatedAt: true }),
-    {
-      ...contract,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  )
-  if (parsed.error && !parsed.data) {
-    throw new Error(parsed.error)
+  const parsed = await safeValidate(BaseContract, {
+    ...contract,
+    id: uuidv7(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  })
+  if (parsed.error || !parsed.data) {
+    throw new Error(parsed.error || 'Validation failed')
   }
-  await collection.insertOne(parsed.data as Contract)
-  return parsed.data as Contract
+  const result = await collection.insertOne(parsed.data)
+  if (!result.acknowledged) {
+    throw new Error('Failed to create contract')
+  }
+  return parsed.data
 }
 
 export async function updateContract(
@@ -41,17 +42,20 @@ export async function updateContract(
     throw new Error('Contract not found')
   }
   const parsed = await safeValidate(
-    BaseContract.omit({ id: true, createdAt: true, updatedAt: true }),
+    BaseContract.omit({ id: true, createdAt: true }).partial(),
     { ...contract, updatedAt: new Date() },
   )
-  if (parsed.error && !parsed.data) {
-    throw new Error(parsed.error)
+  if (parsed.error || !parsed.data) {
+    throw new Error(parsed.error || 'Validation failed')
   }
   const update = await collection.findOneAndUpdate(
     { id },
-    { $set: parsed.data! },
+    { $set: parsed.data },
     { returnDocument: 'after', projection: { _id: 0 } },
   )
+  if (!update) {
+    throw new Error('Failed to update contract')
+  }
   return update
 }
 
