@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { useOverlay, DIALOG_KEY } from '@/hooks/contexts/use-overlay'
+import { useOverlay } from '@/hooks/contexts/use-overlay'
 import {
   DropdownMenuTrigger,
   DropdownMenuContent,
@@ -10,27 +10,23 @@ import { IconDotsVertical } from '@tabler/icons-react'
 
 export const ActionDropdown = ({
   children,
-  key,
+  id,
 }: {
   children?: React.ReactNode
-  key?: string
+  id: string
 }) => {
   const { open, openOverlay, closeOverlay } = useOverlay()
-  const KEY = `${DIALOG_KEY.ACTION_DROPDOWN}_${key}`
   return (
     <DropdownMenu
-      open={open[KEY] || false}
-      onOpenChange={(v) =>
-        v
-          ? openOverlay(KEY)
-          : closeOverlay(KEY)
-      }
+      key={id}
+      open={open[id] || false}
+      onOpenChange={(v) => (v ? openOverlay(id) : closeOverlay(id))}
     >
       <DropdownMenuTrigger
         asChild
         onClick={(e) => {
           e.preventDefault()
-          openOverlay(KEY)
+          openOverlay(id)
         }}
       >
         <Button
