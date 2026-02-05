@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import {
+  IconBriefcase,
   IconDashboard,
   IconInnerShadowTop,
   IconUsers,
@@ -33,6 +34,11 @@ const data = {
       title: 'Dashboard',
       url: '',
       icon: IconDashboard,
+    },
+    {
+      title: 'Contracts',
+      url: 'contract',
+      icon: IconBriefcase,
     },
     {
       title: 'Workers',
