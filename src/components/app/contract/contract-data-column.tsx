@@ -10,6 +10,7 @@ import { Pen, Trash } from 'lucide-react'
 import { useCallback } from 'react'
 import { toast } from 'sonner'
 import ContractForm, { ContractFormDataValues } from './contract-form'
+import Link from 'next/link'
 
 const ContractAction = ({ cell }: { cell: Cell<Contract, unknown> }) => {
   const { deleted, list, updated } = useContractQuery()
@@ -80,10 +81,7 @@ const ContractAction = ({ cell }: { cell: Cell<Contract, unknown> }) => {
           </DropdownMenuItem>
         }
       >
-        <ContractForm
-          values={cell.row.original}
-          onSubmit={onEdit}
-        />
+        <ContractForm values={cell.row.original} onSubmit={onEdit} />
       </ModalDialog>
       <ConfirmDialog
         title={'Delete Contract!'}
@@ -103,6 +101,9 @@ export const contractColumns: ColumnDef<Contract>[] = [
   {
     accessorKey: 'title',
     header: 'Title',
+    cell: ({ row }) => (
+      <Link href={`contract/${row.original.id}`} className='underline'>{row.original.title}</Link>
+    ),
   },
   {
     accessorKey: 'workers',

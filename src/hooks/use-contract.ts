@@ -14,11 +14,6 @@ export const useContractQuery = () => {
     initialData: [],
   })
 
-  const get = useMutation({
-    mutationKey: ['CONTRACT', 'GET_CONTRACT'],
-    mutationFn: getContractService,
-  })
-
   const created = useMutation({
     mutationKey: ['CONTRACT', 'CREATE_CONTRACT'],
     mutationFn: createContractService,
@@ -36,7 +31,6 @@ export const useContractQuery = () => {
 
   return {
     list,
-    get,
     created,
     updated,
     deleted,

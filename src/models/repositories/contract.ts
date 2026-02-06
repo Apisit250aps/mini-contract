@@ -1,15 +1,36 @@
 import { contractsCollection } from '@/lib/mongo'
 import { safeValidate, uuidv7 } from '@/lib/utils'
-import { BaseContract, Contract } from '@/models/entities/contract'
+import {
+  BaseContract,
+  Contract,
+  ContractDetail,
+} from '@/models/entities/contract'
 
 export async function getContracts(): Promise<Contract[]> {
   const collection = await contractsCollection()
   return collection.find({}, { projection: { _id: 0 } }).toArray()
 }
 
-export async function getContractById(id: string): Promise<Contract | null> {
+export async function getContractById(
+  id: string,
+): Promise<ContractDetail | null> {
   const collection = await contractsCollection()
-  return collection.findOne({ id }, { projection: { _id: 0 } })
+  const [contract] = await collection
+    .aggregate<ContractDetail>([
+      { $match: { id } },
+      {
+        $lookup: {
+          from: 'workers',
+          localField: 'workers',
+          foreignField: 'id',
+          as: 'workersDetail',
+          pipeline: [{ $project: { _id: 0 } }],
+        },
+      },
+      { $project: { _id: 0 } },
+    ])
+    .toArray()
+  return contract || null
 }
 
 export async function createContract(
