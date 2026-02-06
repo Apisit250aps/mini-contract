@@ -1,6 +1,6 @@
 import client from '@/lib/client'
 import { onErrorMessage } from '@/lib/utils'
-import { Contract } from '@/models/entities/contract'
+import { Contract, ContractDetail } from '@/models/entities/contract'
 
 export async function createContractService({
   data,
@@ -22,9 +22,9 @@ export async function getContractService({
   id,
 }: {
   id: string
-}): Promise<Contract> {
+}): Promise<ContractDetail> {
   try {
-    const result = await client.get<ApiResponse<Contract>>(`/api/contract/${id}`)
+    const result = await client.get<ApiResponse<ContractDetail>>(`/api/contract/${id}`)
     if (result.data.error) {
       throw new Error(result.data.message)
     }
