@@ -21,7 +21,7 @@ export default function PageLayout({
   actions,
 }: PageLayoutProps) {
   return (
-    <Card>
+    <Card className="">
       <CardHeader>
         <div className="flex justify-between items-center">
           <CardTitle>{title}</CardTitle>
