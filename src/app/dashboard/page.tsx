@@ -1,5 +1,5 @@
-import UserView from '@/views/user-view'
+import ContractView from '@/views/contract-view';
 
 export default function Page() {
-  return <UserView />
+  return <ContractView />
 }

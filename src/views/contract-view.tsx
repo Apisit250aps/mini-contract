@@ -57,7 +57,7 @@ export default function ContractView() {
           dialogKey='ADD_CONTRACT_MODAL'
           trigger={
             <Button>
-              <Plus /> Add Contract
+              <Plus /> เพิ่มสัญญา
             </Button>
           }
         >
