@@ -26,8 +26,8 @@ export function ConfirmDialog({
   description,
   trigger,
   onConfirm,
-  cancelText = 'Cancel',
-  confirmText = 'Continue',
+  cancelText = 'ยกเลิก',
+  confirmText = 'ดำเนินการต่อ',
 }: ConfirmDialogProps) {
   const { openOverlay, open, closeOverlay } = useOverlay()
   return (

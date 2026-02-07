@@ -36,7 +36,7 @@ export default function ContractView() {
             if (error) {
               toast.error(error.message)
             } else {
-              toast.success('Contract created successfully.')
+              toast.success('สร้างสัญญาสำเร็จ')
               list.refetch()
               closeAll()
             }
@@ -48,11 +48,11 @@ export default function ContractView() {
   )
   return (
     <PageLayout
-      title="Contracts"
+      title="สัญญา"
       actions={
         <ModalDialog
-          title={'Add Contract'}
-          description="Modify the contract information as needed."
+          title={'เพิ่มสัญญา'}
+          description="แก้ไขข้อมูลสัญญาตามที่ต้องการ"
           closeOutside={false}
           dialogKey='ADD_CONTRACT_MODAL'
           trigger={

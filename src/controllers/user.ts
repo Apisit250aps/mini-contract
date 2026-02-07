@@ -27,7 +27,7 @@ async function CreateUser(
       return NextResponse.json(
         {
           success: false,
-          message: 'Validation Error',
+          message: 'ข้อมูลไม่ถูกต้อง',
           error: validation.error,
         },
         { status: 400 },
@@ -38,8 +38,8 @@ async function CreateUser(
       return NextResponse.json(
         {
           success: false,
-          message: 'Username already exists',
-          error: 'Duplicate username',
+          message: 'ชื่อผู้ใช้นี้ถูกใช้แล้ว',
+          error: 'ชื่อผู้ใช้ซ้ำ',
         },
         { status: 409 },
       )
@@ -49,14 +49,14 @@ async function CreateUser(
 
     return NextResponse.json({
       success: true,
-      message: 'User created successfully',
+      message: 'สร้างผู้ใช้สำเร็จ',
       data: user,
     })
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: 'Internal Server Error',
+          message: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์',
         error: (error as Error).message,
       },
       { status: 500 },
@@ -77,8 +77,8 @@ async function UpdateUser(
       return NextResponse.json(
         {
           success: false,
-          message: 'User not found',
-          error: 'Not Found',
+          message: 'ไม่พบผู้ใช้',
+          error: 'ไม่พบข้อมูล',
         },
         { status: 404 },
       )
@@ -105,7 +105,7 @@ async function UpdateUser(
     const updated = await updateUser(id, validation.data)
     return NextResponse.json({
       success: true,
-      message: 'User updated successfully',
+      message: 'อัปเดตผู้ใช้สำเร็จ',
       data: updated,
     })
   } catch (error) {
@@ -142,7 +142,7 @@ async function DeleteUser(
 
     return NextResponse.json({
       success: true,
-      message: 'User deleted successfully',
+      message: 'ลบผู้ใช้สำเร็จ',
       data: null,
     })
   } catch (error) {
@@ -176,7 +176,7 @@ async function GetUser(
     }
     return NextResponse.json({
       success: true,
-      message: 'User fetched successfully',
+      message: 'ดึงข้อมูลผู้ใช้สำเร็จ',
       data: user,
     })
   } catch (error) {
@@ -197,7 +197,7 @@ async function ListUsers(_: NextRequest): Promise<NextResponse<ApiResponse<User[
     const users = await getAllUser()
     return NextResponse.json({
       success: true,
-      message: 'Users fetched successfully',
+      message: 'ดึงข้อมูลผู้ใช้ทั้งหมดสำเร็จ',
       data: users,
     })
   } catch (error) {

@@ -54,9 +54,9 @@ export default function WorkerForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>ชื่อ</FormLabel>
               <FormControl>
-                <Input type="text" placeholder="Enter worker name" {...field} />
+                <Input type="text" placeholder="กรอกชื่อพนักงาน" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -67,11 +67,11 @@ export default function WorkerForm({
           name="position"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Position</FormLabel>
+              <FormLabel>ตำแหน่ง</FormLabel>
               <FormControl>
                 <Input
                   type="text"
-                  placeholder="Enter worker position"
+                  placeholder="กรอกตำแหน่งพนักงาน"
                   {...field}
                 />
               </FormControl>
@@ -84,11 +84,11 @@ export default function WorkerForm({
           name="hiredAt"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Hired At</FormLabel>
+              <FormLabel>วันที่จ้าง</FormLabel>
               <FormControl>
                 <Input
                   type="date"
-                  placeholder="Select hire date"
+                  placeholder="เลือกวันที่จ้าง"
                   {...field}
                   value={
                     field.value
@@ -118,13 +118,13 @@ export default function WorkerForm({
                   defaultChecked={true}
                 />
               </FormControl>
-              <FormLabel>Is Active</FormLabel>
+              <FormLabel>ใช้งานอยู่</FormLabel>
               <FormMessage />
             </FormItem>
           )}
         />
         <div className="flex justify-end pt-4">
-          <Button type="submit">Submit</Button>
+          <Button type="submit">ส่งข้อมูล</Button>
         </div>
       </form>
     </Form>

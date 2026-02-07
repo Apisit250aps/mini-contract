@@ -33,7 +33,7 @@ async function CreateContract(
       return NextResponse.json(
         {
           success: false,
-          message: 'Validation Error',
+          message: 'ข้อมูลไม่ถูกต้อง',
           error: validation.error,
         },
         { status: 400 },
@@ -44,14 +44,14 @@ async function CreateContract(
 
     return NextResponse.json({
       success: true,
-      message: 'Contract created successfully',
+      message: 'สร้างสัญญาสำเร็จ',
       data: contract,
     })
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: 'Internal Server Error',
+          message: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์',
         error: (error as Error).message,
       },
       { status: 500 },
@@ -72,8 +72,8 @@ async function UpdateContract(
       return NextResponse.json(
         {
           success: false,
-          message: 'Contract not found',
-          error: 'Not Found',
+          message: 'ไม่พบสัญญา',
+          error: 'ไม่พบข้อมูล',
         },
         { status: 404 },
       )
@@ -105,15 +105,15 @@ async function UpdateContract(
       return NextResponse.json(
         {
           success: false,
-          message: 'Failed to update contract',
-          error: 'Update Error',
+            message: 'ไม่สามารถอัปเดตสัญญาได้',
+            error: 'ข้อผิดพลาดในการอัปเดต',
         },
         { status: 500 },
       )
     }
     return NextResponse.json({
       success: true,
-      message: 'Contract updated successfully',
+      message: 'อัปเดตสัญญาสำเร็จ',
       data: updatedContract,
     })
   } catch (error) {
@@ -151,8 +151,8 @@ async function DeleteContract(
       return NextResponse.json(
         {
           success: false,
-          message: 'Failed to delete contract',
-          error: 'Delete Error',
+            message: 'ไม่สามารถลบสัญญาได้',
+            error: 'ข้อผิดพลาดในการลบ',
         },
         { status: 500 },
       )
@@ -160,7 +160,7 @@ async function DeleteContract(
 
     return NextResponse.json({
       success: true,
-      message: 'Contract deleted successfully',
+      message: 'ลบสัญญาสำเร็จ',
       data: null,
     })
   } catch (error) {
@@ -194,7 +194,7 @@ async function GetContract(
     }
     return NextResponse.json({
       success: true,
-      message: 'Contract fetched successfully',
+      message: 'ดึงข้อมูลสัญญาสำเร็จ',
       data: contract,
     })
   } catch (error) {
@@ -217,7 +217,7 @@ async function ListContracts(
     const contracts = await getContracts()
     return NextResponse.json({
       success: true,
-      message: 'Contracts fetched successfully',
+      message: 'ดึงข้อมูลสัญญาทั้งหมดสำเร็จ',
       data: contracts,
     })
   } catch (error) {

@@ -27,7 +27,7 @@ export async function CreateCheck(
       return NextResponse.json(
         {
           success: false,
-          message: 'Validation Error',
+          message: 'ข้อมูลไม่ถูกต้อง',
           error: parsed.error,
         },
         { status: 400 },
@@ -38,14 +38,14 @@ export async function CreateCheck(
     })
     return NextResponse.json({
       success: true,
-      message: 'Check created successfully',
+      message: 'สร้างการตรวจสอบสำเร็จ',
       data: checked,
     })
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: 'Internal Server Error',
+          message: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์',
         error: (error as Error).message,
       },
       { status: 500 },
@@ -71,7 +71,7 @@ export async function AddWorkersToCheck(
       return NextResponse.json(
         {
           success: false,
-          message: 'Check not found',
+          message: 'ไม่พบการตรวจสอบ',
         },
         { status: 404 },
       )
@@ -79,7 +79,7 @@ export async function AddWorkersToCheck(
 
     return NextResponse.json({
       success: true,
-      message: 'Workers added to check successfully',
+      message: 'เพิ่มพนักงานในการตรวจสอบสำเร็จ',
       data: updatedCheck,
     })
   } catch (error) {
@@ -116,7 +116,7 @@ export async function RemoveWorkersFromCheck(
 
     return NextResponse.json({
       success: true,
-      message: 'Workers removed from check successfully',
+      message: 'ลบพนักงานจากการตรวจสอบสำเร็จ',
       data: updatedCheck,
     })
   } catch (error) {
@@ -154,7 +154,7 @@ export async function GetCheckStats(
 
     return NextResponse.json({
       success: true,
-      message: 'Check statistics retrieved successfully',
+      message: 'ดึงข้อมูลสถิติการตรวจสอบสำเร็จ',
       data: stats,
     })
   } catch (error) {
@@ -202,7 +202,7 @@ export async function UpdateCheck(
     const updatedCheck = await updateCheck(checkId, parsed.data)
     return NextResponse.json({
       success: true,
-      message: 'Check updated successfully',
+      message: 'อัปเดตการตรวจสอบสำเร็จ',
       data: updatedCheck,
     })
   } catch (error) {
@@ -235,7 +235,7 @@ export async function DeleteCheck(
     }
     return NextResponse.json({
       success: true,
-      message: 'Check deleted successfully',
+      message: 'ลบการตรวจสอบสำเร็จ',
       data: null,
     })
   } catch (error) {

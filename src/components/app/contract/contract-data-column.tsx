@@ -109,8 +109,12 @@ export const contractColumns: ColumnDef<Contract>[] = [
     ),
   },
   {
+    accessorKey: 'employer',
+    header: 'ผู้ว่าจ้าง',
+  },
+  {
     accessorKey: 'workers',
-    header: 'คนงาน',
+    header: 'จำนวนคนงาน',
     cell: ({ row }) => <>{row.original.workers?.length}</>,
   },
   {

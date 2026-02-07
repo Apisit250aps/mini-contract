@@ -25,7 +25,7 @@ async function CreateWorker(
       return NextResponse.json(
         {
           success: false,
-          message: 'Validation Error',
+          message: 'ข้อมูลไม่ถูกต้อง',
           error: parsed.error,
         },
         { status: 400 },
@@ -35,14 +35,14 @@ async function CreateWorker(
 
     return NextResponse.json({
       success: true,
-      message: 'Worker created successfully',
+      message: 'สร้างพนักงานสำเร็จ',
       data: worker,
     })
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: 'Internal Server Error',
+          message: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์',
         error: (error as Error).message,
       },
       { status: 500 },
@@ -63,8 +63,8 @@ async function UpdateWorker(
       return NextResponse.json(
         {
           success: false,
-          message: 'Worker not found',
-          error: 'Not Found',
+          message: 'ไม่พบพนักงาน',
+          error: 'ไม่พบข้อมูล',
         },
         { status: 404 },
       )
@@ -81,7 +81,7 @@ async function UpdateWorker(
       return NextResponse.json(
         {
           success: false,
-          message: 'Validation Error',
+          message: 'ข้อมูลไม่ถูกต้อง',
           error: validation.error,
         },
         { status: 400 },
@@ -92,15 +92,15 @@ async function UpdateWorker(
       return NextResponse.json(
         {
           success: false,
-          message: 'Failed to update worker',
-          error: 'Update Error',
+            message: 'ไม่สามารถอัปเดตพนักงานได้',
+            error: 'ข้อผิดพลาดในการอัปเดต',
         },
         { status: 500 },
       )
     }
     return NextResponse.json({
       success: true,
-      message: 'Worker updated successfully',
+      message: 'อัปเดตพนักงานสำเร็จ',
       data: updatedWorker,
     })
   } catch (error) {
@@ -124,7 +124,7 @@ async function DeleteWorker(
     await deleteWorker(id)
     return NextResponse.json({
       success: true,
-      message: 'Worker deleted successfully',
+      message: 'ลบพนักงานสำเร็จ',
     })
   } catch (error) {
     return NextResponse.json(

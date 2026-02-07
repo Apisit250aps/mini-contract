@@ -37,7 +37,7 @@ const WorkerActions = ({ cell }: { cell: Cell<Worker, unknown> }) => {
             if (error) {
               toast.error(error.message)
             } else {
-              toast.success('Worker updated successfully.')
+              toast.success('อัปเดตพนักงานสำเร็จ')
               list.refetch()
               closeAll()
             }
@@ -58,7 +58,7 @@ const WorkerActions = ({ cell }: { cell: Cell<Worker, unknown> }) => {
           if (error) {
             toast.error(error)
           } else {
-            toast.success('Worker deleted successfully.')
+            toast.success('ลบพนักงานสำเร็จ')
             list.refetch()
             closeAll()
           }
@@ -70,23 +70,23 @@ const WorkerActions = ({ cell }: { cell: Cell<Worker, unknown> }) => {
   return (
     <ActionDropdown id={cell.row.original.id}>
       <ModalDialog
-        title={'Edit Worker'}
-        description="Modify the worker information as needed."
+        title={'แก้ไขพนักงาน'}
+        description="แก้ไขข้อมูลพนักงานตามที่ต้องการ"
         closeOutside={false}
         trigger={
           <DropdownMenuItem>
-            <Pen /> Edit
+            <Pen /> แก้ไข
           </DropdownMenuItem>
         }
       >
         <WorkerForm values={cell.row.original} onSubmit={onEdit} />
       </ModalDialog>
       <ConfirmDialog
-        title={'Delete Worker!'}
-        description="Are you sure you want to delete this worker? This action cannot be undone."
+        title={'ลบพนักงาน!'}
+        description="คุณแน่ใจหรือไม่ว่าต้องการลบพนักงานนี้? การกระทำนี้ไม่สามารถย้อนกลับได้"
         trigger={
           <DropdownMenuItem variant={'destructive'}>
-            <Trash /> Delete
+            <Trash /> ลบ
           </DropdownMenuItem>
         }
         onConfirm={onDelete}
@@ -106,7 +106,7 @@ export const selectWorkerColumn: ColumnDef<Worker>[] = [
             (table.getIsSomePageRowsSelected() && 'indeterminate')
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
+          aria-label="เลือกทั้งหมด"
         />
       </div>
     ),
@@ -115,7 +115,7 @@ export const selectWorkerColumn: ColumnDef<Worker>[] = [
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
+          aria-label="เลือกแถว"
         />
       </div>
     ),
@@ -124,36 +124,36 @@ export const selectWorkerColumn: ColumnDef<Worker>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: 'ชื่อ',
   },
   {
     accessorKey: 'position',
-    header: 'Position',
+    header: 'ตำแหน่ง',
   },
 ]
 
 export const workerColumns: ColumnDef<Worker>[] = [
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: 'ชื่อ',
   },
   {
     accessorKey: 'position',
-    header: 'Position',
+    header: 'ตำแหน่ง',
   },
   {
     accessorKey: 'isActive',
-    header: 'Is Active',
+    header: 'ใช้งานอยู่',
     cell: TableBooleanCell,
   },
   {
     accessorKey: 'hiredAt',
-    header: 'Hired At',
+    header: 'วันที่จ้าง',
     cell: TableDateTimeCell,
   },
   {
     id: 'actions',
-    header: 'Actions',
+    header: 'จัดการ',
     cell: WorkerActions,
   },
 ]

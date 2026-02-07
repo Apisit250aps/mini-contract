@@ -36,7 +36,7 @@ export default function UserView() {
             if (error) {
               toast.error(error.message)
             } else {
-              toast.success('User created successfully.')
+              toast.success('สร้างผู้ใช้สำเร็จ')
               list.refetch()
               closeAll()
             }
@@ -50,21 +50,21 @@ export default function UserView() {
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>Users</CardTitle>
+          <CardTitle>ผู้ใช้</CardTitle>
           <ModalDialog
-            title={'Add User'}
-            description="Modify the user information as needed."
+            title={'เพิ่มผู้ใช้'}
+            description="แก้ไขข้อมูลผู้ใช้ตามที่ต้องการ"
             closeOutside={false}
             trigger={
               <Button>
-                <Plus /> Add User
+                <Plus /> เพิ่มผู้ใช้
               </Button>
             }
           >
             <UserForm onSubmit={onSubmit} />
           </ModalDialog>
         </div>
-        <CardDescription>List of all users in the system</CardDescription>
+        <CardDescription>รายชื่อผู้ใช้ทั้งหมดในระบบ</CardDescription>
       </CardHeader>
       <CardContent>
         <UserDataTable />

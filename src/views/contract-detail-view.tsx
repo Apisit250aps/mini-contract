@@ -13,17 +13,17 @@ export default function ContractDetailView({
   contractId: string
 }) {
   return (
-    <PageLayout title={`Contract Detail`}>
+    <PageLayout title={`รายละเอียดสัญญา`}>
       <ContractCheckProvider contractId={contractId}>
         <Tabs defaultValue="check" >
           <TabsList>
             <TabsTrigger value="check">
               <CalendarCheck2 />
-              Check
+              เช็คชื่อ
             </TabsTrigger>
             <TabsTrigger value="setting">
               <Settings2 />
-              Setting
+              ตั้งค่า
             </TabsTrigger>
           </TabsList>
           <TabsContent value="check">

@@ -32,7 +32,7 @@ const ColumnActions = ({ cell }: { cell: Cell<User, unknown> }) => {
             if (error) {
               toast.error(onErrorMessage(error))
             } else {
-              toast.success('User updated successfully.')
+              toast.success('อัปเดตผู้ใช้สำเร็จ')
               list.refetch()
               closeAll()
             }
@@ -56,7 +56,7 @@ const ColumnActions = ({ cell }: { cell: Cell<User, unknown> }) => {
           if (error) {
             toast.error(onErrorMessage(error))
           } else {
-            toast.success('User deleted successfully.')
+            toast.success('ลบผู้ใช้สำเร็จ')
             list.refetch()
             closeAll()
           }
@@ -68,23 +68,23 @@ const ColumnActions = ({ cell }: { cell: Cell<User, unknown> }) => {
   return (
     <ActionDropdown id={cell.row.original.id}>
       <ModalDialog
-        title={'Edit User'}
-        description="Modify the user information as needed."
+        title={'แก้ไขผู้ใช้'}
+        description="แก้ไขข้อมูลผู้ใช้ตามที่ต้องการ"
         closeOutside={false}
         trigger={
           <DropdownMenuItem>
-            <Pen /> Edit
+            <Pen /> แก้ไข
           </DropdownMenuItem>
         }
       >
         <UserForm values={cell.row.original} onSubmit={onEdit} />
       </ModalDialog>
       <ConfirmDialog
-        title={'Delete User!'}
-        description="Are you sure you want to delete this user? This action cannot be undone."
+        title={'ลบผู้ใช้!'}
+        description="คุณแน่ใจหรือไม่ว่าต้องการลบผู้ใช้นี้? การกระทำนี้ไม่สามารถย้อนกลับได้"
         trigger={
           <DropdownMenuItem variant={'destructive'}>
-            <Trash /> Delete
+            <Trash /> ลบ
           </DropdownMenuItem>
         }
         onConfirm={onDelete}
@@ -94,14 +94,14 @@ const ColumnActions = ({ cell }: { cell: Cell<User, unknown> }) => {
 }
 
 export const userColumns: ColumnDef<User>[] = [
-  { header: 'Name', accessorKey: 'name' },
-  { header: 'Is Active', accessorKey: 'isActive' },
+  { header: 'ชื่อ', accessorKey: 'name' },
+  { header: 'ใช้งานอยู่', accessorKey: 'isActive' },
   {
-    header: 'Last Login',
+    header: 'เข้าสู่ระบบล่าสุด',
     accessorKey: 'lastLogin',
     cell: TableDateTimeCell,
   },
-  { header: 'Created At', accessorKey: 'createdAt', cell: TableDateTimeCell },
-  { header: 'Updated At', accessorKey: 'updatedAt', cell: TableDateTimeCell },
+  { header: 'สร้างเมื่อ', accessorKey: 'createdAt', cell: TableDateTimeCell },
+  { header: 'อัปเดตเมื่อ', accessorKey: 'updatedAt', cell: TableDateTimeCell },
   { header: 'Actions', cell: ColumnActions },
 ]

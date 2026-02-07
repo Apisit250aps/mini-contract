@@ -30,7 +30,7 @@ export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
         dialogKey="CALCULATE_CHECK_MODAL"
         trigger={
           <DropdownMenuItem>
-            <Calculator /> Calculate
+            <Calculator /> คำนวณ
           </DropdownMenuItem>
         }
       >

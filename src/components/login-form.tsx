@@ -25,8 +25,8 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 const SignInFormSchema = z.object({
-  name: z.string().min(4, 'Name must be at least 4 characters long'),
-  password: z.string().min(8, 'Password must be at least 8 characters long'),
+  name: z.string().min(4, 'ชื่อผู้ใช้ต้องมีอย่างน้อย 4 ตัวอักษร'),
+  password: z.string().min(8, 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร'),
 })
 
 type SignInFormData = z.infer<typeof SignInFormSchema>
@@ -52,11 +52,11 @@ export function LoginForm({
         password: data.password,
       })
       if (!result?.error) {
-        toast.success('Logged in successfully!')
+        toast.success('เข้าสู่ระบบสำเร็จ!')
         router.refresh()
         return
       }
-      toast.error('Invalid username or password')
+      toast.error('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง')
     },
     [router],
   )
@@ -83,9 +83,9 @@ export function LoginForm({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>ชื่อผู้ใช้</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Enter your username" />
+                    <Input {...field} placeholder="กรอกชื่อผู้ใช้" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -96,11 +96,11 @@ export function LoginForm({
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>รหัสผ่าน</FormLabel>
                   <FormControl>
                     <InputPassword
                       {...field}
-                      placeholder="Enter your password"
+                      placeholder="กรอกรหัสผ่าน"
                     />
                   </FormControl>
                   <FormMessage />
@@ -108,7 +108,7 @@ export function LoginForm({
               )}
             />
             <Field>
-              <Button type="submit">Login</Button>
+              <Button type="submit">เข้าสู่ระบบ</Button>
             </Field>
           </FieldGroup>
         </form>

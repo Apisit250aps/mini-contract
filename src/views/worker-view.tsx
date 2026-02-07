@@ -39,7 +39,7 @@ export default function WorkerView() {
             if (error) {
               toast.error(error.message)
             } else {
-              toast.success('Worker created successfully.')
+              toast.success('สร้างพนักงานสำเร็จ')
               list.refetch()
               closeAll()
             }
@@ -53,21 +53,21 @@ export default function WorkerView() {
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>Workers</CardTitle>
+          <CardTitle>พนักงาน</CardTitle>
           <ModalDialog
-            title={'Add Worker'}
-            description="Modify the worker information as needed."
+            title={'เพิ่มพนักงาน'}
+            description="แก้ไขข้อมูลพนักงานตามที่ต้องการ"
             closeOutside={false}
             trigger={
               <Button>
-                <Plus /> Add Worker
+                <Plus /> เพิ่มพนักงาน
               </Button>
             }
           >
             <WorkerForm onSubmit={onSubmit} />
           </ModalDialog>
         </div>
-        <CardDescription>List of all workers in the system</CardDescription>
+        <CardDescription>รายชื่อพนักงานทั้งหมดในระบบ</CardDescription>
       </CardHeader>
       <CardContent>
         <WorkerDataTable />

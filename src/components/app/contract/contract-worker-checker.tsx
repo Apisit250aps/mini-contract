@@ -15,7 +15,7 @@ import { Plus } from 'lucide-react'
 import ModalDialog from '@/components/share/overlay/modal-dialog'
 import ContractDateForm from '@/components/app/contract/contract-date-form'
 import { useContractCheck } from '@/hooks/contexts/use-contract-check'
-import { formatDateToThai, formatShortDateToThai } from '@/lib/utils/formatter';
+import { formatShortDateToThai } from '@/lib/utils/formatter';
 
 export default function ContractWorkerChecker() {
   const { contract, addCheckDate, workerCheck } = useContractCheck()

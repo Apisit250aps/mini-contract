@@ -56,7 +56,7 @@ export function ContractCheckProvider({
         },
         {
           onSuccess: () => {
-            toast.success('New check date added')
+            toast.success('เพิ่มวันเช็คชื่อสำเร็จ')
             refetch()
             closeAll()
           },
@@ -76,7 +76,7 @@ export function ContractCheckProvider({
         },
         {
           onSuccess: () => {
-            toast.success('Worker check updated')
+            toast.success('อัปเดตการเช็คชื่อพนักงานสำเร็จ')
             refetch()
             closeAll()
           },
@@ -92,7 +92,7 @@ export function ContractCheckProvider({
         { checkId },
         {
           onSuccess: () => {
-            toast.success('Check date deleted')
+            toast.success('ลบวันเช็คชื่อสำเร็จ')
             closeAll()
             refetch()
           },
@@ -108,7 +108,7 @@ export function ContractCheckProvider({
         { checkId, data },
         {
           onSuccess: (updated) => {
-            toast.success('Check date updated')
+            toast.success('อัปเดตวันเช็คชื่อสำเร็จ')
             closeAll()
             refetch()
             return updated
