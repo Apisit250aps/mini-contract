@@ -16,7 +16,7 @@ import z from 'zod'
 
 const UserFormSchema = z.object({
   id: z.uuid().nullable().optional(),
-  name: z.string().min(4).max(100),
+  name: z.string().min(4, 'ต้องมีความยาวอย่างน้อย 4 ตัวอักษร').max(100, 'ต้องมีความยาวไม่เกิน 100 ตัวอักษร'),
   password: z.string().min(8).or(z.literal('')),
   isActive: z.boolean(),
 })
@@ -51,9 +51,9 @@ export default function UserForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>ชื่อ</FormLabel>
               <FormControl>
-                <Input type="text" placeholder="Enter your name" {...field} />
+                <Input type="text" placeholder="กรุณาใส่ชื่อของคุณ" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -64,11 +64,11 @@ export default function UserForm({
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>รหัสผ่าน</FormLabel>
               <FormControl>
                 <InputPassword
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder="กรุณาใส่รหัสผ่านของคุณ"
                   {...field}
                 />
               </FormControl>
@@ -88,13 +88,13 @@ export default function UserForm({
                   defaultChecked={true}
                 />
               </FormControl>
-              <FormLabel>Is Active</FormLabel>
+              <FormLabel>อนุญาตใช้งาน</FormLabel>
               <FormMessage />
             </FormItem>
           )}
         />
         <div className="flex justify-end">
-          <Button type="submit">Submit</Button>
+          <Button type="submit">ส่งข้อมูล</Button>
         </div>
       </form>
     </Form>

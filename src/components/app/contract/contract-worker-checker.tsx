@@ -15,6 +15,7 @@ import { Plus } from 'lucide-react'
 import ModalDialog from '@/components/share/overlay/modal-dialog'
 import ContractDateForm from '@/components/app/contract/contract-date-form'
 import { useContractCheck } from '@/hooks/contexts/use-contract-check'
+import { formatDateToThai, formatShortDateToThai } from '@/lib/utils/formatter';
 
 export default function ContractWorkerChecker() {
   const { contract, addCheckDate, workerCheck } = useContractCheck()
@@ -38,7 +39,7 @@ export default function ContractWorkerChecker() {
           {contract?.checked.map((item, idx) => (
             <TableHead key={idx} className="text-center relative group">
               <div className="flex items-center justify-center gap-2">
-                <span>{new Date(item.date).toLocaleDateString()}</span>
+                <span>{formatShortDateToThai(new Date(item.date))}</span>
                 {/* {contract.checked.length > 1 && (
                   <Button
                     size={'sm'}

@@ -11,6 +11,7 @@ import { ConfirmDialog } from '@/components/share/overlay/confirm-dialog'
 import { toast } from 'sonner'
 import { onErrorMessage } from '@/lib/utils'
 import { ActionDropdown } from '@/components/share/overlay/action-dropdown'
+import { TableDateTimeCell } from '@/components/share/table/table-cell'
 
 const ColumnActions = ({ cell }: { cell: Cell<User, unknown> }) => {
   const { closeAll } = useOverlay()
@@ -95,8 +96,12 @@ const ColumnActions = ({ cell }: { cell: Cell<User, unknown> }) => {
 export const userColumns: ColumnDef<User>[] = [
   { header: 'Name', accessorKey: 'name' },
   { header: 'Is Active', accessorKey: 'isActive' },
-  { header: 'Last Login', accessorKey: 'lastLogin' },
-  { header: 'Created At', accessorKey: 'createdAt' },
-  { header: 'Updated At', accessorKey: 'updatedAt' },
+  {
+    header: 'Last Login',
+    accessorKey: 'lastLogin',
+    cell: TableDateTimeCell,
+  },
+  { header: 'Created At', accessorKey: 'createdAt', cell: TableDateTimeCell },
+  { header: 'Updated At', accessorKey: 'updatedAt', cell: TableDateTimeCell },
   { header: 'Actions', cell: ColumnActions },
 ]

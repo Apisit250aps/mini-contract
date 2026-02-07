@@ -11,6 +11,7 @@ import { useCallback } from 'react'
 import { toast } from 'sonner'
 import ContractForm, { ContractFormDataValues } from './contract-form'
 import Link from 'next/link'
+import { TableDateTimeCell } from '@/components/share/table/table-cell'
 
 const ContractAction = ({ cell }: { cell: Cell<Contract, unknown> }) => {
   const { deleted, list, updated } = useContractQuery()
@@ -102,7 +103,9 @@ export const contractColumns: ColumnDef<Contract>[] = [
     accessorKey: 'title',
     header: 'Title',
     cell: ({ row }) => (
-      <Link href={`contract/${row.original.id}`} className='underline'>{row.original.title}</Link>
+      <Link href={`contract/${row.original.id}`} className="underline">
+        {row.original.title}
+      </Link>
     ),
   },
   {
@@ -113,13 +116,13 @@ export const contractColumns: ColumnDef<Contract>[] = [
   {
     accessorKey: 'startDate',
     header: 'Start Date',
+    cell: TableDateTimeCell,
   },
-
   {
     accessorKey: 'endDate',
     header: 'End Date',
+    cell: TableDateTimeCell,
   },
-
   {
     id: 'actions',
     header: 'Actions',

@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { formatShortDateToThai } from '@/lib/utils/formatter';
 
 export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
   const { onDeleteCheck, onEditCheck } = useContractCheck()
@@ -130,7 +131,7 @@ export const checkDateColumn: ColumnDef<Check>[] = [
     header: 'Date',
     cell: ({ row }) => {
       const date = new Date(row.original.date)
-      return <span>{date.toLocaleDateString()}</span>
+      return <span>{formatShortDateToThai(date)}</span>
     },
   },
 

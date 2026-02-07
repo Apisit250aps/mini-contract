@@ -11,6 +11,10 @@ import WorkerForm, { WorkerFormDataValues } from './worker-form'
 import { toast } from 'sonner'
 import { ActionDropdown } from '@/components/share/overlay/action-dropdown'
 import { Checkbox } from '@/components/ui/checkbox'
+import {
+  TableBooleanCell,
+  TableDateTimeCell,
+} from '@/components/share/table/table-cell'
 
 const WorkerActions = ({ cell }: { cell: Cell<Worker, unknown> }) => {
   const { closeAll } = useOverlay()
@@ -140,10 +144,12 @@ export const workerColumns: ColumnDef<Worker>[] = [
   {
     accessorKey: 'isActive',
     header: 'Is Active',
+    cell: TableBooleanCell,
   },
   {
     accessorKey: 'hiredAt',
     header: 'Hired At',
+    cell: TableDateTimeCell,
   },
   {
     id: 'actions',
