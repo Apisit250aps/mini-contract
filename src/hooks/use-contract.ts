@@ -1,4 +1,9 @@
 import {
+  createCheckService,
+  deleteCheckService,
+  updateCheckService,
+} from '@/services/check'
+import {
   createContractService,
   deleteContractService,
   getAllContractService,
@@ -28,10 +33,25 @@ export const useContractQuery = () => {
     mutationFn: deleteContractService,
   })
 
+  const createCheck = useMutation({
+    mutationFn: createCheckService,
+  })
+
+  const updateCheck = useMutation({
+    mutationFn: updateCheckService,
+  })
+
+  const deleteCheck = useMutation({
+    mutationFn: deleteCheckService,
+  })
+
   return {
     list,
     created,
     updated,
     deleted,
+    createCheck,
+    updateCheck,
+    deleteCheck,
   }
 }

@@ -1,18 +1,12 @@
 'use client'
 
 import { ContractDetail } from '@/models/entities/contract'
-import { createCheckService, updateCheckService } from '@/services/check'
 import { getContractService } from '@/services/contract'
-import {
-  RefetchOptions,
-  useMutation,
-  useQuery,
-  useQueryClient,
-  UseQueryResult,
-} from '@tanstack/react-query'
+import { RefetchOptions, useQuery, UseQueryResult } from '@tanstack/react-query'
 import { createContext, useCallback, useContext } from 'react'
 import { toast } from 'sonner'
 import { useOverlay } from './use-overlay'
+import { useContractQuery } from '../use-contract'
 
 type ContractCheckContextValue = {
   contract: ContractDetail | undefined
@@ -20,7 +14,12 @@ type ContractCheckContextValue = {
     options?: RefetchOptions | undefined,
   ) => Promise<UseQueryResult<ContractDetail, unknown>>
   addCheckDate: ({ date }: { date: Date }) => void
-  workerCheck: (checkId: string, workerId: string, isChecked: boolean) => void
+  workerCheck: (
+    checkId: string,
+    workerId: string,
+    isChecked: boolean,
+  ) => Promise<void>
+  onDeleteCheck: (checkId: string) => Promise<void>
 }
 
 const ContractCheckContext = createContext<ContractCheckContextValue | null>(
@@ -34,74 +33,81 @@ export function ContractCheckProvider({
   contractId: string
   children: React.ReactNode
 }) {
-  const queryClient = useQueryClient()
   const { closeAll } = useOverlay()
+  const { createCheck, updateCheck, deleteCheck } = useContractQuery()
 
   const { data: contract, refetch } = useQuery({
     queryKey: ['CONTRACT', 'GET_CONTRACT', contractId],
     queryFn: () => getContractService({ id: contractId }),
   })
 
-  const createCheck = useMutation({
-    mutationFn: createCheckService,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['CONTRACT', 'GET_CONTRACT', contractId],
-      })
-      toast.success('New check date created successfully')
-    },
-    onError: (error) => {
-      toast.error('Error occurred: ' + error.message)
-    },
-  })
-
-  const updateCheck = useMutation({
-    mutationFn: updateCheckService,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['CONTRACT', 'GET_CONTRACT', contractId],
-      })
-      queryClient.invalidateQueries({ queryKey: ['CHECK_STATS', contractId] })
-      toast.success('Check status updated successfully')
-    },
-    onError: (error) => {
-      toast.error('Error occurred: ' + error.message)
-    },
-  })
-
   const addCheckDate = useCallback(
-    ({ date }: { date: Date }) => {
-      createCheck.mutate({
-        data: {
-          contractId: contractId,
-          date: date,
-          workersChecked: [],
+    async ({ date }: { date: Date }) => {
+      await createCheck.mutateAsync(
+        {
+          data: {
+            contractId: contractId,
+            date: date,
+            workersChecked: [],
+          },
         },
-      })
-      closeAll()
+        {
+          onSuccess: () => {
+            toast.success('New check date added')
+            refetch()
+            closeAll()
+          },
+        },
+      )
     },
-    [createCheck, contractId, closeAll],
+    [createCheck, contractId, refetch, closeAll],
   )
 
   const workerCheck = useCallback(
-    (checkId: string, workerId: string, isChecked: boolean) => {
-      updateCheck.mutate({
-        checkId,
-        workerId,
-        isChecked,
-      })
+    async (checkId: string, workerId: string, isChecked: boolean) => {
+      await updateCheck.mutateAsync(
+        {
+          checkId,
+          workerId,
+          isChecked,
+        },
+        {
+          onSuccess: () => {
+            toast.success('Worker check updated')
+            refetch()
+            closeAll()
+          },
+        },
+      )
     },
-    [updateCheck],
+    [closeAll, updateCheck, refetch],
+  )
+
+  const onDeleteCheck = useCallback(
+    async (checkId: string) => {
+      await deleteCheck.mutateAsync(
+        { checkId },
+        {
+          onSuccess: () => {
+            toast.success('Check date deleted')
+            closeAll()
+            refetch()
+          },
+        },
+      )
+    },
+    [closeAll, deleteCheck, refetch],
   )
 
   return (
     <ContractCheckContext.Provider
-      value={{ contract, refetch, addCheckDate, workerCheck }}
+      value={{ contract, refetch, addCheckDate, workerCheck, onDeleteCheck }}
     >
       {children}
     </ContractCheckContext.Provider>
   )
 }
+
 export function useContractCheck() {
   const ctx = useContext(ContractCheckContext)
   if (!ctx) {
