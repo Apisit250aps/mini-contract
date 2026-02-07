@@ -6,6 +6,9 @@ export const BaseCheck = z.object({
   contractId: z.uuid(),
   date: zodDate(),
   workersChecked: z.array(z.uuid()).default([]),
+  weight: z.number().min(0).default(0),
+  rate: z.number().min(0).default(0),
+  amount: z.number().min(0).default(0),
   createdAt: zodDate(),
   updatedAt: zodTimeStamp(),
 })

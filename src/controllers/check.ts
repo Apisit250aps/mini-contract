@@ -181,12 +181,14 @@ export async function UpdateCheck(
         id: true,
         workersChecked: true,
         createdAt: true,
-      }).extend({
-        updatedAt: zodTimeStamp(),
-      }),
+      })
+        .extend({
+          updatedAt: zodTimeStamp(),
+        })
+        .partial(),
       { ...data },
     )
-   
+
     if (parsed.error || !parsed.data) {
       return NextResponse.json(
         {

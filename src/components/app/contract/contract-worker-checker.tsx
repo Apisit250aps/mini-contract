@@ -11,7 +11,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-import { Plus, X } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import ModalDialog from '@/components/share/overlay/modal-dialog'
 import ContractDateForm from '@/components/app/contract/contract-date-form'
 import { useContractCheck } from '@/hooks/contexts/use-contract-check'
@@ -39,7 +39,7 @@ export default function ContractWorkerChecker() {
             <TableHead key={idx} className="text-center relative group">
               <div className="flex items-center justify-center gap-2">
                 <span>{new Date(item.date).toLocaleDateString()}</span>
-                {contract.checked.length > 1 && (
+                {/* {contract.checked.length > 1 && (
                   <Button
                     size={'sm'}
                     variant="ghost"
@@ -47,7 +47,7 @@ export default function ContractWorkerChecker() {
                   >
                     <X size={12} />
                   </Button>
-                )}
+                )} */}
               </div>
             </TableHead>
           ))}
