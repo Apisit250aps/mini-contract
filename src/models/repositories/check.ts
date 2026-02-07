@@ -185,7 +185,11 @@ export async function updateCheck(
   }
 
   const parsed = await safeValidate(
-    BaseCheck.omit({ id: true, createdAt: true }).partial(),
+    BaseCheck.omit({
+      id: true,
+      createdAt: true,
+      workersChecked: true,
+    }).partial(),
     { ...check, updatedAt: new Date() },
   )
 

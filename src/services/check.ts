@@ -89,3 +89,24 @@ export async function deleteCheckService({
     throw new Error(onErrorMessage(error))
   }
 }
+
+export async function editCheckService({
+  checkId,
+  data,
+}: {
+  checkId: string
+  data: Partial<Check>
+}): Promise<Check> {
+  try {
+    const result = await client.put<ApiResponse<Check>>(
+      `/api/check/${checkId}`,
+      data,
+    )
+    if (result.data.error) {
+      throw new Error(result.data.message)
+    }
+    return result.data.data!
+  } catch (error) {
+    throw new Error(onErrorMessage(error))
+  }
+}

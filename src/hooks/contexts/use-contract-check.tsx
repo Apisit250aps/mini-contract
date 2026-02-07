@@ -7,6 +7,7 @@ import { createContext, useCallback, useContext } from 'react'
 import { toast } from 'sonner'
 import { useOverlay } from './use-overlay'
 import { useContractQuery } from '../use-contract'
+import { Check } from '@/models/entities/check'
 
 type ContractCheckContextValue = {
   contract: ContractDetail | undefined
@@ -20,6 +21,7 @@ type ContractCheckContextValue = {
     isChecked: boolean,
   ) => Promise<void>
   onDeleteCheck: (checkId: string) => Promise<void>
+  onEditCheck: (checkId: string, data: Partial<Check>) => Promise<Check>
 }
 
 const ContractCheckContext = createContext<ContractCheckContextValue | null>(
@@ -34,7 +36,8 @@ export function ContractCheckProvider({
   children: React.ReactNode
 }) {
   const { closeAll } = useOverlay()
-  const { createCheck, updateCheck, deleteCheck } = useContractQuery()
+  const { createCheck, updateCheck, deleteCheck, editCheck } =
+    useContractQuery()
 
   const { data: contract, refetch } = useQuery({
     queryKey: ['CONTRACT', 'GET_CONTRACT', contractId],
@@ -99,9 +102,33 @@ export function ContractCheckProvider({
     [closeAll, deleteCheck, refetch],
   )
 
+  const onEditCheck = useCallback(
+    async (checkId: string, data: Partial<Check>) => {
+      return editCheck.mutateAsync(
+        { checkId, data },
+        {
+          onSuccess: (updated) => {
+            toast.success('Check date updated')
+            closeAll()
+            refetch()
+            return updated
+          },
+        },
+      )
+    },
+    [closeAll, editCheck, refetch],
+  )
+
   return (
     <ContractCheckContext.Provider
-      value={{ contract, refetch, addCheckDate, workerCheck, onDeleteCheck }}
+      value={{
+        contract,
+        refetch,
+        addCheckDate,
+        workerCheck,
+        onDeleteCheck,
+        onEditCheck,
+      }}
     >
       {children}
     </ContractCheckContext.Provider>

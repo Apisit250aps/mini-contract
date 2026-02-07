@@ -6,9 +6,10 @@ import { useContractCheck } from '@/hooks/contexts/use-contract-check'
 import { Check } from '@/models/entities/check'
 import { Cell, ColumnDef } from '@tanstack/react-table'
 import { Pen, Trash } from 'lucide-react'
+import ContractDateForm from './contract-date-form'
 
 export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
-  const { onDeleteCheck } = useContractCheck()
+  const { onDeleteCheck, onEditCheck } = useContractCheck()
   return (
     <ActionDropdown id={cell.row.original.id}>
       <ModalDialog
@@ -22,7 +23,18 @@ export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
           </DropdownMenuItem>
         }
       >
-        {/* <CheckForm values={cell.row.original} onSubmit={onEdit} /> */}
+        <ContractDateForm
+          values={{
+            id: cell.row.original.id,
+            date: String(cell.row.original.date),
+          }}
+          onSubmit={async (data) => {
+            await onEditCheck(cell.row.original.id, {
+              contractId: cell.row.original.contractId,
+              date: new Date(data.date),
+            })
+          }}
+        />
       </ModalDialog>
       <ConfirmDialog
         title={'Delete Check!'}

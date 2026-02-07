@@ -1,6 +1,7 @@
 import {
   createCheckService,
   deleteCheckService,
+  editCheckService,
   updateCheckService,
 } from '@/services/check'
 import {
@@ -45,6 +46,10 @@ export const useContractQuery = () => {
     mutationFn: deleteCheckService,
   })
 
+  const editCheck = useMutation({
+    mutationFn: editCheckService,
+  })
+
   return {
     list,
     created,
@@ -53,5 +58,6 @@ export const useContractQuery = () => {
     createCheck,
     updateCheck,
     deleteCheck,
+    editCheck,
   }
 }

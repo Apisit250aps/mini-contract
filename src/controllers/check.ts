@@ -7,6 +7,7 @@ import {
   removeWorkersFromCheck,
   getCheckStatistics,
   deleteCheck,
+  updateCheck,
 } from '@/models/repositories/check'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -155,6 +156,52 @@ export async function GetCheckStats(
       success: true,
       message: 'Check statistics retrieved successfully',
       data: stats,
+    })
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Internal Server Error',
+        error: (error as Error).message,
+      },
+      { status: 500 },
+    )
+  }
+}
+
+export async function UpdateCheck(
+  req: NextRequest,
+  { params }: { params: Promise<CheckUpdateParams> },
+): Promise<NextResponse<ApiResponse<Check>>> {
+  try {
+    const { checkId } = await params
+    const data = await req.json()
+    const parsed = await safeValidate(
+      BaseCheck.omit({
+        id: true,
+        workersChecked: true,
+        createdAt: true,
+      }).extend({
+        updatedAt: zodTimeStamp(),
+      }),
+      { ...data },
+    )
+    console.log('Parsed data:', parsed.data)
+    if (parsed.error || !parsed.data) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Validation Error',
+          error: parsed.error,
+        },
+        { status: 400 },
+      )
+    }
+    const updatedCheck = await updateCheck(checkId, parsed.data)
+    return NextResponse.json({
+      success: true,
+      message: 'Check updated successfully',
+      data: updatedCheck,
     })
   } catch (error) {
     return NextResponse.json(
