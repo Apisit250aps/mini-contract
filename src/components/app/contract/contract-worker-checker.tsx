@@ -67,7 +67,7 @@ export default function ContractWorkerChecker({
   })
 
   const handleAddNewCheckDate = useCallback(
-    asy({ date }: { date: Date }) => {
+    ({ date }: { date: Date }) => {
       createCheckMutation.mutate({
         data: {
           contractId: contractId,
