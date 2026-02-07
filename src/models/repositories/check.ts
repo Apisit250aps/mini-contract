@@ -129,28 +129,38 @@ export async function createCheck(
   check: Omit<Check, 'id' | 'createdAt' | 'updatedAt'>,
 ): Promise<Check> {
   const collection = await checksCollection()
-  const parsed = await safeValidate(BaseCheck, {
+  
+  // Generate UUID for the check
+  const checkWithId = {
     ...check,
+    id: uuidv7(),
     createdAt: new Date(),
     updatedAt: new Date(),
-  })
+  }
+  
+  const parsed = await safeValidate(BaseCheck, checkWithId)
 
   if (parsed.error || !parsed.data) {
     throw new Error(parsed.error || 'Validation failed')
   }
 
-  const checked = await collection.findOne(
-    {
-      contractId: parsed.data.contractId,
-    },
-    { projection: { _id: 0 } },
-  )
+  // Check if there's already a check for this date
+  const startOfDay = new Date(parsed.data.date)
+  startOfDay.setHours(0, 0, 0, 0)
 
-  if (checked) {
-    const isUniq = isUniqDate(parsed.data.date, checked.date)
-    if (isUniq) {
-      throw new Error('Check for this contract on this date already exists')
-    }
+  const endOfDay = new Date(parsed.data.date)
+  endOfDay.setHours(23, 59, 59, 999)
+
+  const existingCheck = await collection.findOne({
+    contractId: parsed.data.contractId,
+    date: {
+      $gte: startOfDay,
+      $lte: endOfDay,
+    },
+  })
+
+  if (existingCheck) {
+    throw new Error('Check for this contract on this date already exists')
   }
 
   const result = await collection.insertOne(parsed.data)
