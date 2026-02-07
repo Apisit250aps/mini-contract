@@ -9,6 +9,8 @@ import {
   updateContract,
 } from '@/models/repositories/contract'
 
+type ContractParams = { contractId: string }
+
 async function CreateContract(
   req: NextRequest,
 ): Promise<NextResponse<ApiResponse<Contract>>> {
@@ -59,13 +61,13 @@ async function CreateContract(
 
 async function UpdateContract(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<ContractParams> },
 ): Promise<NextResponse<ApiResponse<Contract>>> {
   try {
     const data = await req.json()
-    const { id } = await params
+    const { contractId } = await params
     //
-    const contract = await getContractById(id)
+    const contract = await getContractById(contractId)
     if (!contract) {
       return NextResponse.json(
         {
@@ -98,7 +100,7 @@ async function UpdateContract(
         { status: 400 },
       )
     }
-    const updatedContract = await updateContract(id, validation.data)
+    const updatedContract = await updateContract(contractId, validation.data)
     if (!updatedContract) {
       return NextResponse.json(
         {
@@ -128,11 +130,11 @@ async function UpdateContract(
 
 async function DeleteContract(
   _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<ContractParams> },
 ): Promise<NextResponse<ApiResponse<null>>> {
   try {
-    const { id } = await params
-    const contract = await getContractById(id)
+    const { contractId } = await params
+    const contract = await getContractById(contractId)
     if (!contract) {
       return NextResponse.json(
         {
@@ -144,7 +146,7 @@ async function DeleteContract(
       )
     }
 
-    const deleted = await deleteContract(id)
+    const deleted = await deleteContract(contractId)
     if (!deleted) {
       return NextResponse.json(
         {
@@ -175,11 +177,11 @@ async function DeleteContract(
 
 async function GetContract(
   _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<ContractParams> },
 ): Promise<NextResponse<ApiResponse<Contract>>> {
   try {
-    const { id } = await params
-    const contract = await getContractById(id)
+    const { contractId } = await params
+    const contract = await getContractById(contractId)
     if (!contract) {
       return NextResponse.json(
         {
@@ -207,8 +209,10 @@ async function GetContract(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function ListContracts(_: NextRequest): Promise<NextResponse<ApiResponse<Contract[]>>> {
+async function ListContracts(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _req: NextRequest,
+): Promise<NextResponse<ApiResponse<Contract[]>>> {
   try {
     const contracts = await getContracts()
     return NextResponse.json({
@@ -228,5 +232,10 @@ async function ListContracts(_: NextRequest): Promise<NextResponse<ApiResponse<C
   }
 }
 
-export { CreateContract, UpdateContract, DeleteContract, GetContract, ListContracts }
-
+export {
+  CreateContract,
+  UpdateContract,
+  DeleteContract,
+  GetContract,
+  ListContracts,
+}
