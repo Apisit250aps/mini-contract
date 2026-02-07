@@ -1,5 +1,5 @@
 import { checksCollection } from '@/lib/mongo'
-import { isUniqDate, safeValidate, uuidv7 } from '@/lib/utils'
+import { safeValidate, uuidv7 } from '@/lib/utils'
 import { BaseCheck, Check } from '@/models/entities/check'
 
 /**
@@ -129,7 +129,7 @@ export async function createCheck(
   check: Omit<Check, 'id' | 'createdAt' | 'updatedAt'>,
 ): Promise<Check> {
   const collection = await checksCollection()
-  
+
   // Generate UUID for the check
   const checkWithId = {
     ...check,
@@ -137,7 +137,7 @@ export async function createCheck(
     createdAt: new Date(),
     updatedAt: new Date(),
   }
-  
+
   const parsed = await safeValidate(BaseCheck, checkWithId)
 
   if (parsed.error || !parsed.data) {

@@ -11,9 +11,8 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-import { getContractService } from '@/services/contract'
 import { createCheckService, updateCheckService } from '@/services/check'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Plus, X } from 'lucide-react'
 import { useCallback } from 'react'
 import { toast } from 'sonner'
@@ -36,7 +35,6 @@ export default function ContractWorkerChecker({
       queryClient.invalidateQueries({
         queryKey: ['CONTRACT', 'GET_CONTRACT', contractId],
       })
-      queryClient.invalidateQueries({ queryKey: ['CHECK_STATS', contractId] })
       toast.success('New check date created successfully')
     },
     onError: (error) => {

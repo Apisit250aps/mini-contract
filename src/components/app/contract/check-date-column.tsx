@@ -8,6 +8,8 @@ import { deleteCheckService } from '@/services/check'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Cell, ColumnDef } from '@tanstack/react-table'
 import { Pen, Trash } from 'lucide-react'
+import { useCallback } from 'react'
+import { toast } from 'sonner'
 
 export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
   const { closeAll } = useOverlay()
@@ -16,13 +18,31 @@ export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
     mutationFn: deleteCheckService,
   })
 
-  const onDelete = () => {
-    checked.mutate({ checkId: cell.row.original.id })
-    queryClient.invalidateQueries({
-      queryKey: ['CONTRACT', 'GET_CONTRACT', cell.row.original.contractId],
-    })
+  const onDelete = useCallback(() => {
+    checked.mutate(
+      { checkId: cell.row.original.id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: [
+              'CONTRACT',
+              'GET_CONTRACT',
+              cell.row.original.contractId,
+            ],
+          })
+          toast.success('Check date deleted successfully')
+        },
+      },
+    )
+
     closeAll()
-  }
+  }, [
+    checked,
+    cell.row.original.id,
+    cell.row.original.contractId,
+    closeAll,
+    queryClient,
+  ])
 
   return (
     <ActionDropdown id={cell.row.original.id}>
@@ -52,8 +72,6 @@ export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
     </ActionDropdown>
   )
 }
-
-
 
 export const checkDateColumn: ColumnDef<Check>[] = [
   {

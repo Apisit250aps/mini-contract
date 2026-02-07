@@ -2,7 +2,6 @@ import {
   createContractService,
   deleteContractService,
   getAllContractService,
-  getContractService,
   updateContractService,
 } from '@/services/contract'
 import { useMutation, useQuery } from '@tanstack/react-query'
