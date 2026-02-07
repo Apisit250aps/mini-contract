@@ -186,7 +186,7 @@ export async function UpdateCheck(
       }),
       { ...data },
     )
-    console.log('Parsed data:', parsed.data)
+   
     if (parsed.error || !parsed.data) {
       return NextResponse.json(
         {

@@ -32,7 +32,7 @@ export function onErrorMessage(error: unknown): string {
   if (error instanceof z.ZodError) {
     return zodError(error)
   } else if (error instanceof AxiosError) {
-    console.log('Axios Error Response:', error.response)
+   
     return (
       (error.response?.data.error as string) || 'An unexpected error occurred.'
     )
