@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse, isAxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 
 const client = axios.create({})
 client.interceptors.response.use(
