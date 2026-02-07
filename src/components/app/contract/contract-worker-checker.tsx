@@ -20,19 +20,16 @@ import { toast } from 'sonner'
 import ModalDialog from '@/components/share/overlay/modal-dialog'
 import ContractDateForm from '@/components/app/contract/contract-date-form'
 import { useOverlay } from '@/hooks/contexts/use-overlay'
+import { ContractDetail } from '@/models/entities/contract'
 
 export default function ContractWorkerChecker({
-  contractId,
+  contract,
 }: {
-  contractId: string
+  contract: ContractDetail
 }) {
   const queryClient = useQueryClient()
   const { closeAll } = useOverlay()
-  const { data: contract } = useQuery({
-    queryKey: ['CONTRACT', 'GET_CONTRACT', contractId],
-    queryFn: () => getContractService({ id: contractId }),
-  })
-
+  const contractId = contract.id
   const createCheckMutation = useMutation({
     mutationFn: createCheckService,
     onSuccess: () => {

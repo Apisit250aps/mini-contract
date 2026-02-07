@@ -6,6 +6,7 @@ import {
   addWorkersToCheck,
   removeWorkersFromCheck,
   getCheckStatistics,
+  deleteCheck,
 } from '@/models/repositories/check'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -154,6 +155,39 @@ export async function GetCheckStats(
       success: true,
       message: 'Check statistics retrieved successfully',
       data: stats,
+    })
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Internal Server Error',
+        error: (error as Error).message,
+      },
+      { status: 500 },
+    )
+  }
+}
+
+export async function DeleteCheck(
+  req: NextRequest,
+  { params }: { params: Promise<CheckUpdateParams> },
+): Promise<NextResponse<ApiResponse<null>>> {
+  try {
+    const { checkId } = await params
+    const deleted = await deleteCheck(checkId)
+    if (!deleted) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Check not found',
+        },
+        { status: 404 },
+      )
+    }
+    return NextResponse.json({
+      success: true,
+      message: 'Check deleted successfully',
+      data: null,
     })
   } catch (error) {
     return NextResponse.json(
