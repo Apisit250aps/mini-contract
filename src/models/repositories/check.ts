@@ -1,5 +1,5 @@
 import { checksCollection } from '@/lib/mongo'
-import { safeValidate, uuidv7 } from '@/lib/utils'
+import { isUniqDate, safeValidate, uuidv7 } from '@/lib/utils'
 import { BaseCheck, Check } from '@/models/entities/check'
 
 /**
@@ -22,7 +22,9 @@ export async function getCheckById(id: string): Promise<Check | null> {
 /**
  * Get checks by contract ID
  */
-export async function getChecksByContractId(contractId: string): Promise<Check[]> {
+export async function getChecksByContractId(
+  contractId: string,
+): Promise<Check[]> {
   const collection = await checksCollection()
   return collection
     .find({ contractId }, { projection: { _id: 0 } })
@@ -46,7 +48,7 @@ export async function getChecksByDateRange(
           $lte: endDate,
         },
       },
-      { projection: { _id: 0 } }
+      { projection: { _id: 0 } },
     )
     .sort({ date: -1 })
     .toArray()
@@ -70,7 +72,7 @@ export async function getChecksByContractAndDateRange(
           $lte: endDate,
         },
       },
-      { projection: { _id: 0 } }
+      { projection: { _id: 0 } },
     )
     .sort({ date: -1 })
     .toArray()
@@ -88,7 +90,7 @@ export async function getLatestCheckByContractId(
     {
       projection: { _id: 0 },
       sort: { date: -1 },
-    }
+    },
   )
   return check || null
 }
@@ -104,7 +106,7 @@ export async function isWorkerChecked(
   const collection = await checksCollection()
   const startOfDay = new Date(date)
   startOfDay.setHours(0, 0, 0, 0)
-  
+
   const endOfDay = new Date(date)
   endOfDay.setHours(23, 59, 59, 999)
 
@@ -129,13 +131,26 @@ export async function createCheck(
   const collection = await checksCollection()
   const parsed = await safeValidate(BaseCheck, {
     ...check,
-    id: uuidv7(),
     createdAt: new Date(),
     updatedAt: new Date(),
   })
 
   if (parsed.error || !parsed.data) {
     throw new Error(parsed.error || 'Validation failed')
+  }
+
+  const checked = await collection.findOne(
+    {
+      contractId: parsed.data.contractId,
+    },
+    { projection: { _id: 0 } },
+  )
+
+  if (checked) {
+    const isUniq = isUniqDate(parsed.data.date, checked.date)
+    if (isUniq) {
+      throw new Error('Check for this contract on this date already exists')
+    }
   }
 
   const result = await collection.insertOne(parsed.data)
@@ -161,7 +176,7 @@ export async function updateCheck(
 
   const parsed = await safeValidate(
     BaseCheck.omit({ id: true, createdAt: true }).partial(),
-    { ...check, updatedAt: new Date() }
+    { ...check, updatedAt: new Date() },
   )
 
   if (parsed.error || !parsed.data) {
@@ -171,7 +186,7 @@ export async function updateCheck(
   const update = await collection.findOneAndUpdate(
     { id },
     { $set: parsed.data },
-    { returnDocument: 'after', projection: { _id: 0 } }
+    { returnDocument: 'after', projection: { _id: 0 } },
   )
 
   if (!update) {
@@ -196,18 +211,18 @@ export async function addWorkersToCheck(
 
   // Remove duplicates and merge with existing workers
   const uniqueWorkers = Array.from(
-    new Set([...existing.workersChecked, ...workerIds])
+    new Set([...existing.workersChecked, ...workerIds]),
   )
 
   const update = await collection.findOneAndUpdate(
     { id },
-    { 
-      $set: { 
+    {
+      $set: {
         workersChecked: uniqueWorkers,
         updatedAt: new Date(),
-      } 
+      },
     },
-    { returnDocument: 'after', projection: { _id: 0 } }
+    { returnDocument: 'after', projection: { _id: 0 } },
   )
 
   if (!update) {
@@ -232,18 +247,18 @@ export async function removeWorkersFromCheck(
 
   // Remove specified workers
   const updatedWorkers = existing.workersChecked.filter(
-    (workerId) => !workerIds.includes(workerId)
+    (workerId) => !workerIds.includes(workerId),
   )
 
   const update = await collection.findOneAndUpdate(
     { id },
-    { 
-      $set: { 
+    {
+      $set: {
         workersChecked: updatedWorkers,
         updatedAt: new Date(),
-      } 
+      },
     },
-    { returnDocument: 'after', projection: { _id: 0 } }
+    { returnDocument: 'after', projection: { _id: 0 } },
   )
 
   if (!update) {
@@ -265,7 +280,9 @@ export async function deleteCheck(id: string): Promise<boolean> {
 /**
  * Delete all checks for a contract
  */
-export async function deleteChecksByContractId(contractId: string): Promise<number> {
+export async function deleteChecksByContractId(
+  contractId: string,
+): Promise<number> {
   const collection = await checksCollection()
   const result = await collection.deleteMany({ contractId })
   return result.deletedCount
@@ -280,7 +297,7 @@ export async function getCheckStatistics(contractId: string): Promise<{
   averageWorkersPerCheck: number
 }> {
   const collection = await checksCollection()
-  
+
   const stats = await collection
     .aggregate([
       { $match: { contractId } },
@@ -289,8 +306,8 @@ export async function getCheckStatistics(contractId: string): Promise<{
           _id: null,
           totalChecks: { $sum: 1 },
           lastCheckDate: { $max: '$date' },
-          averageWorkersPerCheck: { 
-            $avg: { $size: '$workersChecked' } 
+          averageWorkersPerCheck: {
+            $avg: { $size: '$workersChecked' },
           },
         },
       },
@@ -308,6 +325,7 @@ export async function getCheckStatistics(contractId: string): Promise<{
   return {
     totalChecks: stats[0].totalChecks,
     lastCheckDate: stats[0].lastCheckDate,
-    averageWorkersPerCheck: Math.round(stats[0].averageWorkersPerCheck * 100) / 100,
+    averageWorkersPerCheck:
+      Math.round(stats[0].averageWorkersPerCheck * 100) / 100,
   }
 }

@@ -1,6 +1,7 @@
 import { zodDate, zodTimeStamp, zodUuid } from '@/lib/zod/field'
 import z from 'zod'
 import { BaseWorker } from './worker'
+import { BaseCheck } from './check'
 
 export const BaseContract = z.object({
   id: zodUuid(),
@@ -18,6 +19,7 @@ export const BaseContract = z.object({
 
 export const ContractDetailSchema = BaseContract.extend({
   workersDetail: z.array(BaseWorker),
+  checked: z.array(BaseCheck),
 })
 
 export type Contract = z.infer<typeof BaseContract>

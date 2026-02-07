@@ -8,3 +8,14 @@ export const zodDate = () =>
     .transform((val) => (typeof val === 'string' ? new Date(val) : val))
 export const zodTimeStamp = () => z.date().default(() => new Date())
 export const zodUuid = () => z.uuid().default(() => uuidv7())
+export const zodLocalDate = () =>
+  z
+    .string()
+    .or(z.date())
+    .transform((val) => {
+      if (val instanceof Date) {
+        return val.toLocaleDateString()
+      } else if (typeof val === 'string') {
+        return new Date(val).toLocaleDateString()
+      }
+    })

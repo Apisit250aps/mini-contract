@@ -27,6 +27,15 @@ export async function getContractById(
           pipeline: [{ $project: { _id: 0 } }],
         },
       },
+      {
+        $lookup: {
+          from: 'checks',
+          localField: 'id',
+          foreignField: 'contractId',
+          as: 'checked',
+          pipeline: [{ $project: { _id: 0 } }],
+        },
+      },
       { $project: { _id: 0 } },
     ])
     .toArray()

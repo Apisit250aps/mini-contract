@@ -1,12 +1,12 @@
-import { zodTimeStamp, zodUuid } from '@/lib/zod/field'
+import { zodDate, zodTimeStamp, zodUuid } from '@/lib/zod/field'
 import z from 'zod'
 
 export const BaseCheck = z.object({
   id: zodUuid(),
   contractId: z.uuid(),
-  date: z.date(),
+  date: zodDate(),
   workersChecked: z.array(z.uuid()).default([]),
-  createdAt: z.date(),
+  createdAt: zodDate(),
   updatedAt: zodTimeStamp(),
 })
 

@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios'
 import { clsx, type ClassValue } from 'clsx'
+import { now } from 'lodash'
 import { twMerge } from 'tailwind-merge'
 import z from 'zod'
 
@@ -7,6 +8,12 @@ export { v7 as uuidv7 } from 'uuid'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export const isUniqDate = (now: Date, date: Date): boolean => {
+  const nowDate = now.toLocaleDateString('en-CA')
+  const dateDate = date.toLocaleDateString('en-CA')
+  return nowDate === dateDate
 }
 
 export function zodError<T>(error: z.ZodError<T>): string {
