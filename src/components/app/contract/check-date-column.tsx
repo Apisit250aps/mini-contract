@@ -8,6 +8,15 @@ import { Cell, ColumnDef } from '@tanstack/react-table'
 import { Calculator, Pen, Trash } from 'lucide-react'
 import ContractDateForm from './contract-date-form'
 import ContractCalculate from './contract-calculate'
+import { Button } from '@/components/ui/button'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 
 export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
   const { onDeleteCheck, onEditCheck } = useContractCheck()
@@ -59,7 +68,6 @@ export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
           }}
         />
       </ModalDialog>
-
       <ConfirmDialog
         title={'Delete Check!'}
         description="Are you sure you want to delete this check? This action cannot be undone."
@@ -71,6 +79,48 @@ export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
         onConfirm={() => onDeleteCheck(cell.row.original.id)}
       />
     </ActionDropdown>
+  )
+}
+
+export const WorkerSalary = ({ cell }: { cell: Cell<Check, unknown> }) => {
+  const { contract } = useContractCheck()
+  const workersCount = contract?.workersDetail.length || 0
+  const averageSalary =
+    workersCount > 0 ? cell.row.original.amount / workersCount : 0
+
+  return (
+    <ModalDialog
+      title={'Salary Details'}
+      description="Average salary calculation for this check date."
+      closeOutside={true}
+      dialogKey="SALARY_DETAILS_MODAL"
+      trigger={
+        <Button variant="ghost" asChild>
+          <span className="">{averageSalary.toFixed(2)}</span>
+        </Button>
+      }
+    >
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Workers</TableHead>
+            <TableHead>Amount</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {contract?.workersDetail.map((worker) => (
+            <TableRow key={worker.id}>
+              <TableCell>{worker.name}</TableCell>
+              <TableCell>
+                {cell.row.original.workersChecked.includes(worker.id)
+                  ? averageSalary.toFixed(2)
+                  : '0.00'}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </ModalDialog>
   )
 }
 
@@ -107,13 +157,7 @@ export const checkDateColumn: ColumnDef<Check>[] = [
   },
   {
     header: 'Avg.',
-    cell: ({ row }) => {
-      const avg =
-        row.original.workersChecked.length > 0
-          ? row.original.amount / row.original.workersChecked.length
-          : 0
-      return <span>{avg.toFixed(2)}</span>
-    },
+    cell: WorkerSalary,
   },
   {
     id: 'actions',

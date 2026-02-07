@@ -37,6 +37,7 @@ export default function ContractCalculate({
     },
   })
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const weight = methods.watch('weight')
   const rate = methods.watch('rate')
 
