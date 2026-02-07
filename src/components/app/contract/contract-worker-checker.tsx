@@ -29,6 +29,16 @@ export default function ContractWorkerChecker({
   const queryClient = useQueryClient()
   const { closeAll } = useOverlay()
   const contractId = contract.id
+
+  const nextDate = (date: Date): string => {
+    if (date) {
+      const result = new Date(date)
+      result.setDate(result.getDate() + 1)
+      return result.toISOString()
+    }
+    return new Date().toISOString()
+  }
+
   const createCheckMutation = useMutation({
     mutationFn: createCheckService,
     onSuccess: () => {
@@ -57,7 +67,7 @@ export default function ContractWorkerChecker({
   })
 
   const handleAddNewCheckDate = useCallback(
-    ({ date }: { date: Date }) => {
+    asy({ date }: { date: Date }) => {
       createCheckMutation.mutate({
         data: {
           contractId: contractId,
@@ -119,6 +129,13 @@ export default function ContractWorkerChecker({
               }
             >
               <ContractDateForm
+                values={{
+                  date: nextDate(
+                    new Date(
+                      contract.checked[contract.checked.length - 1]?.date,
+                    ),
+                  ),
+                }}
                 onSubmit={(data) => {
                   handleAddNewCheckDate({ date: new Date(data.date) })
                 }}

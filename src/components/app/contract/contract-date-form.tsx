@@ -14,17 +14,24 @@ import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 const ContractDateSchema = z.object({
+  id: z.string().optional(),
   date: z.string(),
 })
-type ContractDateFormDataValues = z.infer<typeof ContractDateSchema>
+export type ContractDateFormDataValues = z.infer<typeof ContractDateSchema>
+
 export default function ContractDateForm({
   onSubmit,
+  values,
 }: {
+  values: ContractDateFormDataValues
   onSubmit: (data: ContractDateFormDataValues) => void
 }) {
   const methods = useForm({
     resolver: zodResolver(ContractDateSchema),
-    defaultValues: { date: '' },
+    defaultValues: {
+      date: new Date(values.date).toISOString().substring(0, 10),
+      id: values?.id || undefined,
+    },
   })
 
   return (

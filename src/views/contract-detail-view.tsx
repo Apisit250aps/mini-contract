@@ -17,6 +17,7 @@ export default function ContractDetailView({
     queryKey: ['CONTRACT', 'GET_CONTRACT', contractId],
     queryFn: () => getContractService({ id: contractId }),
   })
+  
   return (
     <PageLayout title={`Contract Detail`}>
       <Tabs defaultValue="check" className="w-full h-100">

@@ -5,6 +5,7 @@ import {
   Contract,
   ContractDetail,
 } from '@/models/entities/contract'
+import { sortBy } from 'lodash'
 
 export async function getContracts(): Promise<Contract[]> {
   const collection = await contractsCollection()
@@ -33,7 +34,7 @@ export async function getContractById(
           localField: 'id',
           foreignField: 'contractId',
           as: 'checked',
-          pipeline: [{ $project: { _id: 0 } }],
+          pipeline: [{ $project: { _id: 0 } }, { $sort: { date: 1 } }],
         },
       },
       { $project: { _id: 0 } },
