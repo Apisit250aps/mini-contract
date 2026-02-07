@@ -24,8 +24,8 @@ export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
   return (
     <ActionDropdown id={cell.row.original.id}>
       <ModalDialog
-        title={'Calculate Check'}
-        description="Modify the check information as needed."
+        title={'คำนวณค่าจ้าง'}
+        description="คำนวณค่าจ้างสำหรับวันตรวจสอบนี้"
         closeOutside={false}
         dialogKey="CALCULATE_CHECK_MODAL"
         trigger={
@@ -46,13 +46,13 @@ export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
         />
       </ModalDialog>
       <ModalDialog
-        title={'Edit Check'}
-        description="Modify the check information as needed."
+        title={'แก้ไขเช็คชื่อรายวัน'}
+        description="แก้ไขวันที่ตรวจสอบสำหรับสัญญานี้"
         closeOutside={false}
         dialogKey="EDIT_CHECK_MODAL"
         trigger={
           <DropdownMenuItem>
-            <Pen /> Edit
+            <Pen /> แก้ไข
           </DropdownMenuItem>
         }
       >
@@ -70,11 +70,11 @@ export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
         />
       </ModalDialog>
       <ConfirmDialog
-        title={'Delete Check!'}
-        description="Are you sure you want to delete this check? This action cannot be undone."
+        title={'ลบเช็คชื่อรายวัน!'}
+        description="คุณแน่ใจหรือไม่ว่าต้องการลบเช็คชื่อนี้? การกระทำนี้ไม่สามารถย้อนกลับได้"
         trigger={
           <DropdownMenuItem variant={'destructive'}>
-            <Trash /> Delete
+            <Trash /> ลบ
           </DropdownMenuItem>
         }
         onConfirm={() => onDeleteCheck(cell.row.original.id)}
@@ -91,8 +91,8 @@ export const WorkerSalary = ({ cell }: { cell: Cell<Check, unknown> }) => {
 
   return (
     <ModalDialog
-      title={'Salary Details'}
-      description="Average salary calculation for this check date."
+      title={'รายละเอียดเงินค่าจ้าง'}
+      description="การคำนวณเงินเดือนเฉลี่ยสำหรับวันตรวจสอบนี้"
       closeOutside={true}
       dialogKey="SALARY_DETAILS_MODAL"
       trigger={
@@ -104,8 +104,8 @@ export const WorkerSalary = ({ cell }: { cell: Cell<Check, unknown> }) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Workers</TableHead>
-            <TableHead>Amount</TableHead>
+            <TableHead>คนงาน</TableHead>
+            <TableHead>จำนวนเงิน</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -128,41 +128,40 @@ export const WorkerSalary = ({ cell }: { cell: Cell<Check, unknown> }) => {
 export const checkDateColumn: ColumnDef<Check>[] = [
   {
     accessorKey: 'date',
-    header: 'Date',
+    header: 'วันที่',
     cell: ({ row }) => {
       const date = new Date(row.original.date)
       return <span>{formatShortDateToThai(date)}</span>
     },
   },
-
   {
     accessorKey: 'weight',
-    header: 'Weight (Kg)',
+    header: 'น้ำหนัก (กก.)',
     cell: ({ row }) => {
       return <span>{row.original.weight}</span>
     },
   },
   {
     accessorKey: 'amount',
-    header: 'Amount',
+    header: 'จำนวนเงิน',
     cell: ({ row }) => {
       return <span>{row.original.amount}</span>
     },
   },
   {
     accessorKey: 'workersChecked',
-    header: 'Workers Checked',
+    header: 'จำนวนคนงานที่เช็คชื่อ',
     cell: ({ row }) => {
       return <span>{row.original.workersChecked.length}</span>
     },
   },
   {
-    header: 'Avg.',
+    header: 'เฉลี่ย',
     cell: WorkerSalary,
   },
   {
     id: 'actions',
-    header: 'Actions',
+    header: 'จัดการ',
     cell: CheckDateAction,
   },
 ]

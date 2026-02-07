@@ -42,16 +42,16 @@ export default function ContractDateForm({
           name="date"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Date</FormLabel>
+              <FormLabel>วันที่</FormLabel>
               <FormControl>
-                <Input type="date" placeholder="Contract date" {...field} />
+                <Input type="date" placeholder="วันที่สัญญา" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <div className="flex justify-end">
-          <Button type="submit">Submit</Button>
+          <Button type="submit">ส่ง</Button>
         </div>
       </form>
     </Form>

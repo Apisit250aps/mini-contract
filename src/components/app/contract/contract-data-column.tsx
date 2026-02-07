@@ -27,7 +27,7 @@ const ContractAction = ({ cell }: { cell: Cell<Contract, unknown> }) => {
           if (error) {
             toast.error(error)
           } else {
-            toast.success('Contract deleted successfully.')
+            toast.success('ลบสัญญาสำเร็จ.')
             list.refetch()
             closeAll()
           }
@@ -59,7 +59,7 @@ const ContractAction = ({ cell }: { cell: Cell<Contract, unknown> }) => {
             if (error) {
               toast.error(error.message)
             } else {
-              toast.success('Contract updated successfully.')
+              toast.success('แก้ไขสัญญาสำเร็จ.')
               list.refetch()
               closeAll()
             }
@@ -72,24 +72,24 @@ const ContractAction = ({ cell }: { cell: Cell<Contract, unknown> }) => {
   return (
     <ActionDropdown id={cell.row.original.id}>
       <ModalDialog
-        title={'Edit Contract'}
-        description="Modify the contract information as needed."
+        title={'แก้ไขสัญญา'}
+        description="แก้ไขข้อมูลสัญญาตามที่ต้องการ"
         closeOutside={false}
         dialogKey="EDIT_CONTRACT_MODAL"
         trigger={
           <DropdownMenuItem>
-            <Pen /> Edit
+            <Pen /> แก้ไข
           </DropdownMenuItem>
         }
       >
         <ContractForm values={cell.row.original} onSubmit={onEdit} />
       </ModalDialog>
       <ConfirmDialog
-        title={'Delete Contract!'}
-        description="Are you sure you want to delete this contract? This action cannot be undone."
+        title={'ลบสัญญา!'}
+        description="คุณแน่ใจหรือไม่ว่าต้องการลบสัญญานี้? การกระทำนี้ไม่สามารถย้อนกลับได้"
         trigger={
           <DropdownMenuItem variant={'destructive'}>
-            <Trash /> Delete
+            <Trash /> ลบ
           </DropdownMenuItem>
         }
         onConfirm={onDelete}
@@ -101,7 +101,7 @@ const ContractAction = ({ cell }: { cell: Cell<Contract, unknown> }) => {
 export const contractColumns: ColumnDef<Contract>[] = [
   {
     accessorKey: 'title',
-    header: 'Title',
+    header: 'หัวข้อ',
     cell: ({ row }) => (
       <Link href={`contract/${row.original.id}`} className="underline">
         {row.original.title}
@@ -110,22 +110,22 @@ export const contractColumns: ColumnDef<Contract>[] = [
   },
   {
     accessorKey: 'workers',
-    header: 'Workers',
+    header: 'คนงาน',
     cell: ({ row }) => <>{row.original.workers?.length}</>,
   },
   {
     accessorKey: 'startDate',
-    header: 'Start Date',
+    header: 'วันที่เริ่มต้น',
     cell: TableDateTimeCell,
   },
   {
     accessorKey: 'endDate',
-    header: 'End Date',
+    header: 'วันที่สิ้นสุด',
     cell: TableDateTimeCell,
   },
   {
     id: 'actions',
-    header: 'Actions',
+    header: 'จัดการ',
     cell: ContractAction,
   },
 ]

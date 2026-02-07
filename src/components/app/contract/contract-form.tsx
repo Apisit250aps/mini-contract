@@ -75,9 +75,9 @@ export default function ContractForm({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>หัวข้อ</FormLabel>
                 <FormControl>
-                  <Input placeholder="Contract title" {...field} />
+                  <Input placeholder="หัวข้อสัญญา" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -88,9 +88,9 @@ export default function ContractForm({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>รายละเอียด</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Contract description" {...field} />
+                  <Textarea placeholder="รายละเอียดสัญญา" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -101,9 +101,9 @@ export default function ContractForm({
             name="employer"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Employer</FormLabel>
+                <FormLabel>นายจ้าง</FormLabel>
                 <FormControl>
-                  <Input placeholder="Employer name" {...field} />
+                  <Input placeholder="ชื่อนายจ้าง" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -114,7 +114,7 @@ export default function ContractForm({
             name="startDate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Start Date</FormLabel>
+                <FormLabel>วันที่เริ่มต้น</FormLabel>
                 <FormControl>
                   <Input
                     type="date"
@@ -132,7 +132,7 @@ export default function ContractForm({
             name="endDate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>End Date</FormLabel>
+                <FormLabel>วันที่สิ้นสุด</FormLabel>
                 <FormControl>
                   <Input
                     type="date"
@@ -156,7 +156,7 @@ export default function ContractForm({
                     onCheckedChange={(checked) => field.onChange(checked)}
                   />
                 </FormControl>
-                <FormLabel>Is Active</FormLabel>
+                <FormLabel>ใช้งานอยู่</FormLabel>
                 <FormMessage />
               </FormItem>
             )}
@@ -166,7 +166,7 @@ export default function ContractForm({
             name="workers"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Workers</FormLabel>
+                <FormLabel>คนงาน</FormLabel>
                 <FormControl>
                   <DataTable
                     columns={selectWorkerColumn}
@@ -180,7 +180,7 @@ export default function ContractForm({
             )}
           />
           <Button type="submit" className="w-full">
-            Submit
+            ส่ง
           </Button>
         </div>
       </form>

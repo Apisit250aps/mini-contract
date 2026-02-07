@@ -54,11 +54,11 @@ export default function ContractCalculate({
           name="weight"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Weight (Kg)</FormLabel>
+              <FormLabel>น้ำหนัก (กก.)</FormLabel>
               <FormControl>
                 <Input
                   type="number"
-                  placeholder="Weight in Kg"
+                  placeholder="น้ำหนัก (กก.)"
                   {...field}
                   onChange={(e) => field.onChange(Number(e.target.value))}
                 />
@@ -72,11 +72,11 @@ export default function ContractCalculate({
           name="rate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Rate</FormLabel>
+              <FormLabel>อัตรา</FormLabel>
               <FormControl>
                 <Input
                   type="number"
-                  placeholder="Rate"
+                  placeholder="อัตรา"
                   {...field}
                   onChange={(e) => field.onChange(Number(e.target.value))}
                 />
@@ -90,7 +90,7 @@ export default function ContractCalculate({
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount</FormLabel>
+              <FormLabel>จำนวนเงิน</FormLabel>
               <FormControl>
                 <Input type="number" {...field} readOnly />
               </FormControl>
@@ -99,7 +99,7 @@ export default function ContractCalculate({
           )}
         />
         <div className="">
-          <Button type="submit">Calculate</Button>
+          <Button type="submit">คำนวณ</Button>
         </div>
       </form>
     </Form>
