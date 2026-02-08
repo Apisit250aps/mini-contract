@@ -103,7 +103,7 @@ export const contractColumns: ColumnDef<Contract>[] = [
     accessorKey: 'title',
     header: 'หัวข้อ',
     cell: ({ row }) => (
-      <Link href={`contract/${row.original.id}`} className="underline">
+      <Link href={`/dashboard/contract/${row.original.id}`} className="underline">
         {row.original.title}
       </Link>
     ),
