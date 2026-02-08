@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { useOverlay } from './use-overlay'
 import { useContractQuery } from '../use-contract'
 import { Check } from '@/models/entities/check'
+import React from 'react'
 
 type ContractCheckContextValue = {
   contract: ContractDetail | undefined
@@ -22,8 +23,13 @@ type ContractCheckContextValue = {
   ) => Promise<void>
   onDeleteCheck: (checkId: string) => Promise<void>
   onEditCheck: (checkId: string, data: Partial<Check>) => Promise<Check>
+  setSettings: React.Dispatch<React.SetStateAction<ContractSettings>>
+  settings: ContractSettings
 }
 
+export type ContractSettings = {
+  rate: number
+}
 const ContractCheckContext = createContext<ContractCheckContextValue | null>(
   null,
 )
@@ -36,6 +42,9 @@ export function ContractCheckProvider({
   children: React.ReactNode
 }) {
   const { closeAll } = useOverlay()
+  const [settings, setSettings] = React.useState<ContractSettings>({
+    rate: 250,
+  })
   const { createCheck, updateCheck, deleteCheck, editCheck } =
     useContractQuery()
 
@@ -123,11 +132,13 @@ export function ContractCheckProvider({
     <ContractCheckContext.Provider
       value={{
         contract,
+        settings,
         refetch,
         addCheckDate,
         workerCheck,
         onDeleteCheck,
         onEditCheck,
+        setSettings,
       }}
     >
       {children}

@@ -25,15 +25,17 @@ export type ContractCalculateForm = z.infer<typeof ContractCalculateSchema>
 
 export default function ContractCalculate({
   onSubmit,
+  values,
 }: {
+  values?: Partial<ContractCalculateForm>
   onSubmit?: (data: ContractCalculateForm) => Promise<void>
 }) {
   const methods = useForm<ContractCalculateForm>({
     resolver: zodResolver(ContractCalculateSchema),
     defaultValues: {
-      weight: 0,
-      rate: 250,
-      amount: 0,
+      weight: values?.weight ?? 0,
+      rate: values?.rate ?? 250,
+      amount: values?.amount ?? 0,
     },
   })
 

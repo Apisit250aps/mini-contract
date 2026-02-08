@@ -20,7 +20,7 @@ import {
 import { formatShortDateToThai } from '@/lib/utils/formatter'
 
 export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
-  const { onDeleteCheck, onEditCheck } = useContractCheck()
+  const { onDeleteCheck, onEditCheck, settings } = useContractCheck()
   return (
     <ActionDropdown id={cell.row.original.id}>
       <ModalDialog
@@ -35,6 +35,10 @@ export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
         }
       >
         <ContractCalculate
+          values={{
+            weight: cell.row.original.weight,
+            rate: cell.row.original.rate ?? settings.rate,
+          }}
           onSubmit={async (data) => {
             await onEditCheck(cell.row.original.id, {
               contractId: cell.row.original.contractId,
