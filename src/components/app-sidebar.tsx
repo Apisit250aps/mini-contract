@@ -5,6 +5,7 @@ import {
   IconBriefcase,
   IconDashboard,
   IconInnerShadowTop,
+  IconSettings,
   IconUsers,
   IconUserScreen,
 } from '@tabler/icons-react'
@@ -31,26 +32,31 @@ const data = {
   },
   navMain: [
     {
-      title: 'Dashboard',
+      title: 'สรุปยอดรวม',
       url: '',
       icon: IconDashboard,
     },
     {
-      title: 'Contracts',
+      title: 'สัญญา',
       url: 'contract',
       icon: IconBriefcase,
     },
     {
-      title: 'Workers',
+      title: 'คนงาน',
       url: 'worker',
       icon: IconUserScreen,
     },
   ],
   documents: [
     {
-      name: 'Users',
+      name: 'ผู้ใช้',
       url: 'user',
       icon: IconUsers,
+    },
+    {
+      name: 'การตั้งค่า',
+      url: 'settings',
+      icon: IconSettings,
     },
   ],
 }

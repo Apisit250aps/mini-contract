@@ -74,9 +74,9 @@ export function LoginForm({
                 <div className="flex size-8 items-center justify-center rounded-md">
                   <GalleryVerticalEnd className="size-6" />
                 </div>
-                <span className="sr-only">Acme Inc.</span>
+                <span className="sr-only">Mini Contract</span>
               </Link>
-              <h1 className="text-xl font-bold">Welcome to Acme Inc.</h1>
+              <h1 className="text-xl font-bold">Welcome to Mini Contract</h1>
             </div>
             <FormField
               control={methods.control}

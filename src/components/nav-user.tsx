@@ -74,7 +74,7 @@ export function NavUser() {
             </DropdownMenuLabel>
             <DropdownMenuItem onClick={LogOut}>
               <IconLogout />
-              Log out
+              <span>ออกจากระบบ</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
