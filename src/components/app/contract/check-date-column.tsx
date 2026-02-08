@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { formatShortDateToThai } from '@/lib/utils/formatter';
+import { formatShortDateToThai } from '@/lib/utils/formatter'
 
 export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
   const { onDeleteCheck, onEditCheck } = useContractCheck()
@@ -85,7 +85,7 @@ export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
 
 export const WorkerSalary = ({ cell }: { cell: Cell<Check, unknown> }) => {
   const { contract } = useContractCheck()
-  const workersCount = contract?.workersDetail.length || 0
+  const workersCount = cell.row.original.workersChecked.length || 0
   const averageSalary =
     workersCount > 0 ? cell.row.original.amount / workersCount : 0
 
