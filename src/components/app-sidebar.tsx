@@ -53,11 +53,11 @@ const data = {
       url: 'user',
       icon: IconUsers,
     },
-    {
-      name: 'การตั้งค่า',
-      url: 'settings',
-      icon: IconSettings,
-    },
+    // {
+    //   name: 'การตั้งค่า',
+    //   url: 'settings',
+    //   icon: IconSettings,
+    // },
   ],
 }
 
