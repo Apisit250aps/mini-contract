@@ -1,0 +1,1 @@
+docker compose exec -it mongo mongorestore --db=contracts --drop /backup/contracts

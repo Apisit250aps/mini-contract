@@ -6,7 +6,7 @@ export type MiddlewareGroup = {
   prefix?: string
   paths?: string[]
   middlewares: Array<
-    (req: NextAuthRequest) => Promise<NextResponse | void | null>
+    (req: NextAuthRequest) => Promise<NextResponse | void | null> | NextResponse | void | null
   >
 }
 

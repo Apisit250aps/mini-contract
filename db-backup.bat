@@ -1,0 +1,1 @@
+mongodump --db=contracts --out=./backup/contracts
