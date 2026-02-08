@@ -2,6 +2,7 @@ import axios from 'axios'
 import { faker } from '@faker-js/faker'
 
 const generateWorker = () => {
+  
   return {
     name: faker.person.fullName(),
     // position: faker.word.,
