@@ -22,12 +22,12 @@ import { formatShortDateToThai } from '@/lib/utils/formatter'
 export const CheckDateAction = ({ cell }: { cell: Cell<Check, unknown> }) => {
   const { onDeleteCheck, onEditCheck, settings } = useContractCheck()
   return (
-    <ActionDropdown id={cell.row.original.id}>
+    <ActionDropdown id={`${cell.row.original.id}-actions`}>
       <ModalDialog
         title={'คำนวณค่าจ้าง'}
         description="คำนวณค่าจ้างสำหรับวันตรวจสอบนี้"
         closeOutside={false}
-        dialogKey="CALCULATE_CHECK_MODAL"
+        dialogKey={`CALCULATE_CHECK_MODAL-${cell.row.original.id}`}
         trigger={
           <DropdownMenuItem>
             <Calculator /> คำนวณ
@@ -98,7 +98,7 @@ export const WorkerSalary = ({ cell }: { cell: Cell<Check, unknown> }) => {
       title={'รายละเอียดเงินค่าจ้าง'}
       description="การคำนวณเงินเดือนเฉลี่ยสำหรับวันตรวจสอบนี้"
       closeOutside={true}
-      dialogKey="SALARY_DETAILS_MODAL"
+      dialogKey={cell.row.original.id}
       trigger={
         <Button variant="ghost" asChild>
           <span className="">{averageSalary.toFixed(2)}</span>
