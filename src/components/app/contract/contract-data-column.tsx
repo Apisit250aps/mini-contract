@@ -82,7 +82,9 @@ const ContractAction = ({ cell }: { cell: Cell<Contract, unknown> }) => {
           </DropdownMenuItem>
         }
       >
-        <ContractForm values={cell.row.original} onSubmit={onEdit} />
+        <div className="scrollbar h-[80vh] sm:max-w-500 overflow-auto px-2 pb-4">
+          <ContractForm values={cell.row.original} onSubmit={onEdit} />
+        </div>
       </ModalDialog>
       <ConfirmDialog
         title={'ลบสัญญา!'}

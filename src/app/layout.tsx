@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Sarabun } from 'next/font/google'
 import './globals.css'
+import './style.css'
 
 import { Toaster } from '@/components/ui/sonner'
 import { SessionProvider } from 'next-auth/react'
