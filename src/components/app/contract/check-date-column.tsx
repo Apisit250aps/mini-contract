@@ -98,7 +98,7 @@ export const WorkerSalary = ({ cell }: { cell: Cell<Check, unknown> }) => {
       title={'รายละเอียดเงินค่าจ้าง'}
       description="การคำนวณเงินเดือนเฉลี่ยสำหรับวันตรวจสอบนี้"
       closeOutside={true}
-      dialogKey={cell.row.original.id}
+      dialogKey={`WORKER_SALARY_MODAL-${cell.row.original.id}`}
       trigger={
         <Button variant="ghost" asChild>
           <span className="">{averageSalary.toFixed(2)}</span>
@@ -129,6 +129,13 @@ export const WorkerSalary = ({ cell }: { cell: Cell<Check, unknown> }) => {
   )
 }
 
+const CheckLength = ({ cell }: { cell: Cell<Check, unknown> }) => {
+  const { contract } = useContractCheck()
+  const workersCount = contract?.workers?.length || 0
+  const checkedCount = cell.row.original.workersChecked.length
+  return <span>{`${checkedCount} / ${workersCount}`}</span>
+}
+
 export const checkDateColumn: ColumnDef<Check>[] = [
   {
     accessorKey: 'date',
@@ -155,9 +162,7 @@ export const checkDateColumn: ColumnDef<Check>[] = [
   {
     accessorKey: 'workersChecked',
     header: 'จำนวนคนงานที่เช็คชื่อ',
-    cell: ({ row }) => {
-      return <span>{row.original.workersChecked.length}</span>
-    },
+    cell: CheckLength,
   },
   {
     header: 'เฉลี่ย',
